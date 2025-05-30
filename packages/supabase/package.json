@@ -1,0 +1,10 @@
+{
+  "name": "Supabase",
+  "description": "Run supabase locally using Supabase CLI",
+  "packageManager": "yarn@4.9.1",
+  "scripts": {
+    "start:supabase": "supabase start",
+    "stop:supabase": "supabase start",
+    "gen:types": "supabase gen types"
+  }
+}
