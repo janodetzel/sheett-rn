@@ -1,10 +1,10 @@
 import { createMergeableStore } from 'tinybase';
-import { createDurableObjectStoragePersister } from 'tinybase/persisters/persister-durable-object-storage';
+import { createDurableObjectSqlStoragePersister } from 'tinybase/persisters/persister-durable-object-sql-storage';
 import { getWsServerDurableObjectFetch, WsServerDurableObject } from 'tinybase/synchronizers/synchronizer-ws-server-durable-object';
 
 export class SheettDurableObject extends WsServerDurableObject<Env> {
 	createPersister() {
-		return createDurableObjectStoragePersister(createMergeableStore(), this.ctx.storage);
+		return createDurableObjectSqlStoragePersister(createMergeableStore(), this.ctx.storage.sql);
 	}
 }
 
