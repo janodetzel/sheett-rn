@@ -8,9 +8,10 @@ module.exports = function (api) {
       [
         "react-native-unistyles/plugin",
         {
-          root: ".",
+          root: "src",
         },
       ],
+      ["inline-import", { extensions: [".sql"] }],
     ],
   };
 };

@@ -13,5 +13,6 @@ config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, "node_modules"),
   path.resolve(monorepoRoot, "node_modules"),
 ];
+// config.resolver.sourceExts.push("sql");
 
 module.exports = config;

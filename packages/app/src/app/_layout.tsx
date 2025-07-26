@@ -9,7 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import "react-native-reanimated";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useColorScheme } from "@/src/hooks/useColorScheme";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
