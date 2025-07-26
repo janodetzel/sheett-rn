@@ -13,6 +13,7 @@ import {
 import { createMergeableStore } from "tinybase/mergeable-store";
 import { createExpoSqlitePersister } from "tinybase/persisters/persister-expo-sqlite";
 import { createWsSynchronizer } from "tinybase/synchronizers/synchronizer-ws-client";
+import env from "@/src/utils/environment";
 
 const TABLE_NAME = "tasks";
 
@@ -35,6 +36,7 @@ function AddTask() {
 function TaskList() {
   const store = useStore(TABLE_NAME);
   const sortedRowIds = useRowIds(TABLE_NAME, store);
+
   return (
     <FlatList
       data={sortedRowIds}
@@ -53,19 +55,19 @@ function TaskList() {
 }
 export default function HomeScreen() {
   const store = useCreateMergeableStore(() => createMergeableStore());
+
   useCreatePersister(
     store,
     (store) =>
       createExpoSqlitePersister(store, SQLite.openDatabaseSync("tasks.db")),
     [],
-    // @ts-ignore
     (persister) => persister.load().then(persister.startAutoSave),
   );
+
   useCreateSynchronizer(store, async (store) => {
     const sync = await createWsSynchronizer(
       store,
-      // new WebSocket("wss://sheett-cf-worker.jano-b33.workers.dev"),
-      new WebSocket("ws://localhost:8787/tasks"),
+      new WebSocket(env.EXPO_PUBLIC_CF_DO_WS_URL),
     );
 
     await sync.startSync();

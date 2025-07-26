@@ -11,6 +11,7 @@ const envSchema = z.object({
 
   EXPO_PUBLIC_SUPABASE_URL: z.string().url(),
   EXPO_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
+  EXPO_PUBLIC_CF_DO_WS_URL: z.string().url(),
 });
 
 const env = envSchema.parse(process.env);
