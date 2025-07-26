@@ -8,8 +8,10 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import "react-native-reanimated";
+import { Provider as TinybaseProvider } from "tinybase/ui-react";
 
 import { useColorScheme } from "@/src/hooks/useColorScheme";
+import React from "react";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -23,14 +25,16 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <KeyboardProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </KeyboardProvider>
-    </ThemeProvider>
+    <TinybaseProvider>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <KeyboardProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </KeyboardProvider>
+      </ThemeProvider>
+    </TinybaseProvider>
   );
 }
