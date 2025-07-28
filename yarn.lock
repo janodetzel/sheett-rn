@@ -3520,16 +3520,17 @@ __metadata:
     expo-image: "npm:~2.1.7"
     expo-linking: "npm:~7.1.5"
     expo-router: "npm:~5.0.6"
-    expo-splash-screen: "npm:~0.30.8"
+    expo-splash-screen: "npm:^0.30.10"
     expo-sqlite: "npm:^15.2.14"
     expo-status-bar: "npm:~2.2.3"
     expo-symbols: "npm:~0.4.4"
     expo-system-ui: "npm:~5.0.7"
     expo-web-browser: "npm:~14.1.6"
+    nanoid: "npm:^5.1.5"
     react: "npm:19.0.0"
     react-dom: "npm:19.0.0"
     react-native: "npm:0.79.2"
-    react-native-edge-to-edge: "npm:^1.6.0"
+    react-native-edge-to-edge: "npm:^1.6.2"
     react-native-gesture-handler: "npm:~2.24.0"
     react-native-keyboard-controller: "npm:^1.17.3"
     react-native-nitro-modules: "npm:0.26.4"
@@ -3540,6 +3541,7 @@ __metadata:
     react-native-url-polyfill: "npm:^2.0.0"
     react-native-web: "npm:~0.20.0"
     react-native-webview: "npm:13.13.5"
+    reconnecting-websocket: "npm:^4.4.0"
     tinybase: "npm:^6.4.2"
     typescript: "npm:~5.8.3"
     zod: "npm:^3.25.42"
@@ -5574,7 +5576,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-splash-screen@npm:~0.30.8":
+"expo-splash-screen@npm:^0.30.10":
   version: 0.30.10
   resolution: "expo-splash-screen@npm:0.30.10"
   dependencies:
@@ -7877,6 +7879,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:^5.1.5":
+  version: 5.1.5
+  resolution: "nanoid@npm:5.1.5"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: 10c0/e6004f1ad6c7123eeb037062c4441d44982037dc043aabb162457ef6986e99964ba98c63c975f96c547403beb0bf95bc537bd7bf9a09baf381656acdc2975c3c
+  languageName: node
+  linkType: hard
+
 "napi-postinstall@npm:^0.3.0":
   version: 0.3.2
   resolution: "napi-postinstall@npm:0.3.2"
@@ -8671,7 +8682,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-edge-to-edge@npm:^1.6.0":
+"react-native-edge-to-edge@npm:^1.6.2":
   version: 1.6.2
   resolution: "react-native-edge-to-edge@npm:1.6.2"
   peerDependencies:
@@ -8908,6 +8919,13 @@ __metadata:
   version: 19.0.0
   resolution: "react@npm:19.0.0"
   checksum: 10c0/9cad8f103e8e3a16d15cb18a0d8115d8bd9f9e1ce3420310aea381eb42aa0a4f812cf047bb5441349257a05fba8a291515691e3cb51267279b2d2c3253f38471
+  languageName: node
+  linkType: hard
+
+"reconnecting-websocket@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "reconnecting-websocket@npm:4.4.0"
+  checksum: 10c0/0155223200882e123bc884eb5935bdff7ee4d2998eee578c23bba6a6fec63b68c22ccaf9ff4bdcd05284568d89f02e6a664cc40daf108872f820197848b09579
   languageName: node
   linkType: hard
 
