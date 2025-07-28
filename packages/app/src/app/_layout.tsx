@@ -7,14 +7,19 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SystemBars } from "react-native-edge-to-edge";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import "react-native-reanimated";
-import { Provider as TinybaseProvider } from "tinybase/ui-react";
 
 import { useColorScheme } from "@/src/hooks/useColorScheme";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect, useState } from "react";
-import { SessionProvider } from "../utils/supabase";
+import { SessionProvider, useSession } from "../utils/supabase";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
+SplashScreen.setOptions({ fade: true });
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -27,7 +32,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (loaded && sessionReady) {
-      SplashScreen.hide();
+      SplashScreen.hideAsync();
     }
   }, [loaded, sessionReady]);
 
@@ -39,19 +44,34 @@ export default function RootLayout() {
   return (
     <SessionProvider callback={() => setSessionReady(true)}>
       <StatusBar style="auto" animated />
-      <TinybaseProvider>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <SafeAreaProvider>
           <KeyboardProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
+            <GestureHandlerRootView>
+              {sessionReady && <RootNavigator />}
+            </GestureHandlerRootView>
             <SystemBars style={"auto"} />
           </KeyboardProvider>
-        </ThemeProvider>
-      </TinybaseProvider>
+        </SafeAreaProvider>
+      </ThemeProvider>
     </SessionProvider>
+  );
+}
+
+function RootNavigator() {
+  const session = useSession();
+
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Protected guard={!session}>
+        <Stack.Screen name="(auth)" />
+      </Stack.Protected>
+
+      <Stack.Protected guard={!!session}>
+        <Stack.Screen name="(home)" />
+      </Stack.Protected>
+
+      <Stack.Screen name="+not-found" />
+    </Stack>
   );
 }

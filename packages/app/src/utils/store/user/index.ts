@@ -1,11 +1,11 @@
 import { NoValuesSchema } from "tinybase/store";
+import * as Crypto from "expo-crypto";
 import * as UIReact from "tinybase/ui-react/with-schemas";
 import { createMergeableStore, TablesSchema } from "tinybase/with-schemas";
 import { useSession } from "../../supabase";
 import { useCreateClientPersisterAndStart } from "../helpers/persistence";
 import { useCreateServerSynchronizerAndStart } from "../helpers/sync";
 import { useCallback } from "react";
-import { nanoid } from "nanoid";
 
 const USER_STORE_PREFIX = "userStore-";
 
@@ -42,7 +42,7 @@ const useAddSpreadsheetCallback = () => {
   const store = useStore(storeId);
 
   return useCallback(() => {
-    const id = nanoid();
+    const id = Crypto.randomUUID();
 
     store?.setRow("spreadsheets", id, {
       id,
@@ -89,6 +89,8 @@ const UserStore = () => {
   );
 
   useProvideStore(storeId, store);
+
+  return null;
 };
 
 export {

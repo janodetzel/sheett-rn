@@ -19,10 +19,14 @@ export const useCreateServerSynchronizerAndStart = <
         store,
 
         // @ts-ignore WebSocket.ping() method is not available on ReconnectingWebSocket
-        new ReconnectingWebSocket(env.EXPO_PUBLIC_CF_DO_WS_URL + storeId, [], {
-          maxReconnectionDelay: 1000,
-          connectionTimeout: 1000,
-        }),
+        new ReconnectingWebSocket(
+          `${env.EXPO_PUBLIC_CF_DO_WS_URL}/${storeId}`,
+          [],
+          {
+            maxReconnectionDelay: 1000,
+            connectionTimeout: 1000,
+          },
+        ),
       );
 
       // Start the synchronizer.

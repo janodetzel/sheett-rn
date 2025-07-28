@@ -41,6 +41,7 @@ export const SessionProvider = ({ children, callback }: Props) => {
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("Event", _event);
       setSession(session);
     });
   }, [callback]);
