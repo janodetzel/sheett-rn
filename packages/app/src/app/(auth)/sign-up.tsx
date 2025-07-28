@@ -78,7 +78,7 @@ export default function SignUpScreen() {
         <TextInput
           style={stylesheet.input}
           placeholder="Email"
-          placeholderTextColor={theme.colors.icon}
+          placeholderTextColor={theme.colors.text.tertiary}
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
@@ -89,7 +89,7 @@ export default function SignUpScreen() {
         <TextInput
           style={stylesheet.input}
           placeholder="Password"
-          placeholderTextColor={theme.colors.icon}
+          placeholderTextColor={theme.colors.text.tertiary}
           value={password}
           onChangeText={setPassword}
           secureTextEntry
@@ -99,7 +99,7 @@ export default function SignUpScreen() {
         <TextInput
           style={stylesheet.input}
           placeholder="Confirm Password"
-          placeholderTextColor={theme.colors.icon}
+          placeholderTextColor={theme.colors.text.tertiary}
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           secureTextEntry
@@ -141,7 +141,7 @@ const stylesheet = StyleSheet.create((theme) => ({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 40,
-    color: theme.colors.text,
+    color: theme.colors.text.primary,
   },
   input: {
     height: 50,
@@ -151,8 +151,8 @@ const stylesheet = StyleSheet.create((theme) => ({
     marginBottom: 16,
     fontSize: 16,
     backgroundColor: theme.colors.background,
-    color: theme.colors.text,
-    borderColor: theme.colors.icon,
+    color: theme.colors.text.primary,
+    borderColor: theme.colors.border.primary,
   },
   button: {
     height: 50,
@@ -160,7 +160,7 @@ const stylesheet = StyleSheet.create((theme) => ({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 16,
-    backgroundColor: theme.colors.tint,
+    backgroundColor: theme.colors.interactive.primary,
   },
   buttonText: {
     color: "white",
@@ -173,6 +173,6 @@ const stylesheet = StyleSheet.create((theme) => ({
   },
   linkText: {
     fontSize: 16,
-    color: theme.colors.tint,
+    color: theme.colors.text.primary,
   },
 }));

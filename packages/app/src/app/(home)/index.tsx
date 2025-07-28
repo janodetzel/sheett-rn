@@ -1,6 +1,7 @@
 import React from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   useAddSpreadsheetCallback,
   useDelSpreadsheetCallback,
@@ -13,6 +14,7 @@ export default function Home() {
   const spreadsheetIds = useSpreadsheetIds();
   const addSpreadsheet = useAddSpreadsheetCallback();
   const joinSpreadsheet = useJoinSpreadsheetCallback();
+  const insets = useSafeAreaInsets();
 
   const handleSignOut = async () => {
     try {
@@ -42,10 +44,14 @@ export default function Home() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <ScrollView
         style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: insets.bottom },
+        ]}
+        showsVerticalScrollIndicator={false}
       >
         <Text style={styles.title}>Welcome to Sheett</Text>
         <Text style={styles.subtitle}>Manage your spreadsheets</Text>
@@ -122,17 +128,17 @@ const styles = StyleSheet.create((theme) => ({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 16,
-    color: theme.colors.text,
+    color: theme.colors.text.primary,
   },
   subtitle: {
     fontSize: 16,
     textAlign: "center",
     marginBottom: 40,
-    color: theme.colors.text,
+    color: theme.colors.text.primary,
     opacity: 0.7,
   },
   createButton: {
-    backgroundColor: theme.colors.tint,
+    backgroundColor: theme.colors.interactive.primary,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
@@ -151,12 +157,12 @@ const styles = StyleSheet.create((theme) => ({
     fontSize: 18,
     fontWeight: "600",
     marginBottom: 16,
-    color: theme.colors.text,
+    color: theme.colors.text.primary,
   },
   emptyText: {
     fontSize: 14,
     textAlign: "center",
-    color: theme.colors.text,
+    color: theme.colors.text.primary,
     opacity: 0.6,
     fontStyle: "italic",
   },
@@ -164,20 +170,20 @@ const styles = StyleSheet.create((theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: theme.colors.background === "#fff" ? "#F5F5F5" : "#2A2A2A",
+    backgroundColor: theme.colors.background,
     padding: 16,
     borderRadius: 8,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: theme.colors.icon,
+    borderColor: theme.colors.border.primary,
   },
   spreadsheetId: {
     fontSize: 14,
-    color: theme.colors.text,
+    color: theme.colors.text.primary,
     flex: 1,
   },
   deleteButton: {
-    backgroundColor: "#FF4444",
+    backgroundColor: theme.colors.interactive.destructive,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
@@ -189,7 +195,7 @@ const styles = StyleSheet.create((theme) => ({
     fontWeight: "600",
   },
   signOutButton: {
-    backgroundColor: theme.colors.tint,
+    backgroundColor: theme.colors.interactive.destructive,
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
