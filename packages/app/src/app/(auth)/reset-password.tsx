@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { Alert } from "react-native";
 import { router } from "expo-router";
 import { StyleSheet } from "react-native-unistyles";
-import { supabase } from "../../utils/supabase/client";
 import { Button, Text, Screen, TextInput } from "../../components/ui";
+import {
+  resetPassword,
+  validateEmail,
+  handleAuthError,
+} from "../../utils/supabase/auth";
 
 export default function ResetPasswordScreen() {
   const [email, setEmail] = useState("");
@@ -15,15 +19,16 @@ export default function ResetPasswordScreen() {
       return;
     }
 
+    if (!validateEmail(email)) {
+      Alert.alert("Error", "Please enter a valid email address");
+      return;
+    }
+
     setLoading(true);
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: "sheett://reset-password",
-      });
+      const result = await resetPassword({ email });
 
-      if (error) {
-        Alert.alert("Error", error.message);
-      } else {
+      if (handleAuthError(result)) {
         Alert.alert(
           "Success",
           "Password reset email sent! Please check your email for instructions.",
@@ -35,8 +40,6 @@ export default function ResetPasswordScreen() {
           ]
         );
       }
-    } catch (error) {
-      Alert.alert("Error", "An unexpected error occurred");
     } finally {
       setLoading(false);
     }

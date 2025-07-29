@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import { Alert } from "react-native";
 import { router } from "expo-router";
 import { StyleSheet } from "react-native-unistyles";
-import { supabase } from "../../utils/supabase/client";
 import { Button, Text, Screen, TextInput } from "../../components/ui";
+import {
+  signUp,
+  validateEmail,
+  validatePassword,
+  handleAuthError,
+} from "../../utils/supabase/auth";
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState("");
@@ -17,26 +22,27 @@ export default function SignUpScreen() {
       return;
     }
 
+    if (!validateEmail(email)) {
+      Alert.alert("Error", "Please enter a valid email address");
+      return;
+    }
+
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+      Alert.alert("Error", passwordValidation.errors[0]);
+      return;
+    }
+
     if (password !== confirmPassword) {
       Alert.alert("Error", "Passwords do not match");
       return;
     }
 
-    if (password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters long");
-      return;
-    }
-
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+      const result = await signUp({ email, password });
 
-      if (error) {
-        Alert.alert("Error", error.message);
-      } else {
+      if (handleAuthError(result)) {
         Alert.alert(
           "Success",
           "Account created successfully! Please check your email for verification.",
@@ -48,15 +54,9 @@ export default function SignUpScreen() {
           ]
         );
       }
-    } catch (error) {
-      Alert.alert("Error", "An unexpected error occurred");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleSignIn = () => {
-    router.push("/(auth)/sign-in");
   };
 
   return (
@@ -106,7 +106,7 @@ export default function SignUpScreen() {
 
       <Button
         title="Already have an account? Sign In"
-        onPress={handleSignIn}
+        onPress={() => router.push("/(auth)/sign-in")}
         variant="outline"
         size="medium"
         fullWidth

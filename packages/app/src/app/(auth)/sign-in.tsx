@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { Alert } from "react-native";
 import { router } from "expo-router";
 import { StyleSheet } from "react-native-unistyles";
-import { supabase } from "../../utils/supabase/client";
 import { Button, Text, Screen, TextInput } from "../../components/ui";
+import {
+  signIn,
+  validateEmail,
+  handleAuthError,
+} from "../../utils/supabase/auth";
 
 export default function SignInScreen() {
   const [email, setEmail] = useState("");
@@ -16,28 +20,21 @@ export default function SignInScreen() {
       return;
     }
 
+    if (!validateEmail(email)) {
+      Alert.alert("Error", "Please enter a valid email address");
+      return;
+    }
+
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const result = await signIn({ email, password });
 
-      if (error) {
-        Alert.alert("Error", error.message);
-      } else {
-        // Navigate to home screen on successful sign in
+      if (handleAuthError(result)) {
         router.replace("/(home)");
       }
-    } catch (error) {
-      Alert.alert("Error", "An unexpected error occurred");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleSignUp = () => {
-    router.push("/(auth)/sign-up");
   };
 
   return (
@@ -78,7 +75,7 @@ export default function SignInScreen() {
 
       <Button
         title="Don't have an account? Sign Up"
-        onPress={handleSignUp}
+        onPress={() => router.push("/(auth)/sign-up")}
         variant="outline"
         size="medium"
         fullWidth
