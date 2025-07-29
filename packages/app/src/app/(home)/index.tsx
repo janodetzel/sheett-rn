@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Alert, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import {
@@ -7,13 +7,29 @@ import {
   useJoinSpreadsheetCallback,
   useSpreadsheetIds,
 } from "../../utils/store/user";
-import { supabase } from "../../utils/supabase";
-import { Button, Text, Screen } from "../../components/ui";
+import { supabase, useSession } from "../../utils/supabase";
+import { Button, Text, Screen, TextInput } from "../../components/ui";
+import {
+  getCurrentUser,
+  linkAnonymousAccount,
+  validateEmail,
+  validatePassword,
+  handleAuthError,
+} from "../../utils/supabase/auth";
 
 export default function Home() {
   const spreadsheetIds = useSpreadsheetIds();
   const addSpreadsheet = useAddSpreadsheetCallback();
   const joinSpreadsheet = useJoinSpreadsheetCallback();
+  const [showLinkAccount, setShowLinkAccount] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [linkingLoading, setLinkingLoading] = useState(false);
+
+  const session = useSession();
+
+  const isAnonymous = session?.user?.is_anonymous;
 
   const handleSignOut = async () => {
     try {
@@ -43,6 +59,54 @@ export default function Home() {
     }
   };
 
+  const handleLinkAccount = async () => {
+    if (!email || !password || !confirmPassword) {
+      Alert.alert("Error", "Please fill in all fields");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      Alert.alert("Error", "Please enter a valid email address");
+      return;
+    }
+
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+      Alert.alert("Error", passwordValidation.errors[0]);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match");
+      return;
+    }
+
+    setLinkingLoading(true);
+    try {
+      const result = await linkAnonymousAccount({ email, password });
+
+      if (handleAuthError(result)) {
+        Alert.alert(
+          "Success",
+          "Account linked successfully! Please check your email for verification.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                setShowLinkAccount(false);
+                setEmail("");
+                setPassword("");
+                setConfirmPassword("");
+              },
+            },
+          ]
+        );
+      }
+    } finally {
+      setLinkingLoading(false);
+    }
+  };
+
   return (
     <Screen padding="medium">
       <Text variant="h2" weight="bold" align="center" style={styles.title}>
@@ -56,6 +120,91 @@ export default function Home() {
       >
         Manage your spreadsheets
       </Text>
+
+      {/* Anonymous Account Section */}
+      {isAnonymous && (
+        <View style={styles.anonymousSection}>
+          <Text variant="h4" weight="semibold" style={styles.sectionTitle}>
+            Guest Account
+          </Text>
+          <Text
+            variant="bodySmall"
+            color="secondary"
+            style={styles.anonymousText}
+          >
+            You&apos;re currently signed in as a guest. Link your account with
+            an email and password to save your data permanently.
+          </Text>
+
+          {!showLinkAccount ? (
+            <Button
+              title="Link Account"
+              onPress={() => setShowLinkAccount(true)}
+              variant="primary"
+              size="medium"
+              style={styles.linkAccountButton}
+            />
+          ) : (
+            <View style={styles.linkAccountForm}>
+              <TextInput
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                autoComplete="email"
+                size="large"
+                style={styles.input}
+              />
+
+              <TextInput
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                autoComplete="new-password"
+                size="large"
+                style={styles.input}
+              />
+
+              <TextInput
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry
+                autoComplete="new-password"
+                size="large"
+                style={styles.input}
+              />
+
+              <View style={styles.linkAccountButtons}>
+                <Button
+                  title={linkingLoading ? "Linking..." : "Link Account"}
+                  onPress={handleLinkAccount}
+                  variant="primary"
+                  size="medium"
+                  loading={linkingLoading}
+                  disabled={linkingLoading}
+                  style={styles.linkButton}
+                />
+
+                <Button
+                  title="Cancel"
+                  onPress={() => {
+                    setShowLinkAccount(false);
+                    setEmail("");
+                    setPassword("");
+                    setConfirmPassword("");
+                  }}
+                  variant="secondary"
+                  size="medium"
+                  style={styles.cancelButton}
+                />
+              </View>
+            </View>
+          )}
+        </View>
+      )}
 
       <Button
         title="Create New Spreadsheet"
@@ -166,5 +315,38 @@ const styles = StyleSheet.create((theme) => ({
   signOutButton: {
     alignSelf: "center",
     minWidth: 120,
+  },
+  // Anonymous account styles
+  anonymousSection: {
+    backgroundColor: theme.colors.surface,
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: theme.colors.border.secondary,
+  },
+  anonymousText: {
+    marginBottom: 16,
+    lineHeight: 20,
+  },
+  linkAccountButton: {
+    alignSelf: "flex-start",
+  },
+  linkAccountForm: {
+    marginTop: 16,
+  },
+  input: {
+    marginBottom: 12,
+  },
+  linkAccountButtons: {
+    flexDirection: "row",
+    gap: 12,
+    marginTop: 8,
+  },
+  linkButton: {
+    flex: 1,
+  },
+  cancelButton: {
+    flex: 1,
   },
 }));

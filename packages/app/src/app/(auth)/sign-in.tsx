@@ -5,6 +5,7 @@ import { StyleSheet } from "react-native-unistyles";
 import { Button, Text, Screen, TextInput } from "../../components/ui";
 import {
   signIn,
+  signInAnonymously,
   validateEmail,
   handleAuthError,
 } from "../../utils/supabase/auth";
@@ -13,6 +14,7 @@ export default function SignInScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [anonymousLoading, setAnonymousLoading] = useState(false);
 
   const handleSignIn = async () => {
     if (!email || !password) {
@@ -37,10 +39,32 @@ export default function SignInScreen() {
     }
   };
 
+  const handleAnonymousSignIn = async () => {
+    setAnonymousLoading(true);
+    try {
+      const result = await signInAnonymously();
+
+      if (handleAuthError(result)) {
+        router.replace("/(home)");
+      }
+    } finally {
+      setAnonymousLoading(false);
+    }
+  };
+
   return (
     <Screen padding="medium" scrollable={true}>
       <Text variant="h1" weight="bold" align="center" style={styles.title}>
-        Sign In
+        Welcome Back
+      </Text>
+
+      <Text
+        variant="body"
+        color="secondary"
+        align="center"
+        style={styles.subtitle}
+      >
+        Sign in to your account to continue
       </Text>
 
       <TextInput
@@ -51,6 +75,7 @@ export default function SignInScreen() {
         keyboardType="email-address"
         autoComplete="email"
         size="large"
+        style={styles.input}
       />
 
       <TextInput
@@ -60,6 +85,16 @@ export default function SignInScreen() {
         secureTextEntry
         autoComplete="password"
         size="large"
+        style={styles.input}
+      />
+
+      <Button
+        title="Forgot Password?"
+        onPress={() => router.push("/(auth)/reset-password")}
+        variant="secondary"
+        size="small"
+        fullWidth
+        style={styles.forgotPassword}
       />
 
       <Button
@@ -69,14 +104,34 @@ export default function SignInScreen() {
         size="large"
         fullWidth
         loading={loading}
-        disabled={loading}
+        disabled={loading || anonymousLoading}
         style={styles.button}
+      />
+
+      <Text
+        variant="body"
+        color="secondary"
+        align="center"
+        style={styles.orText}
+      >
+        or
+      </Text>
+
+      <Button
+        title={anonymousLoading ? "Signing In..." : "Continue as Guest"}
+        onPress={handleAnonymousSignIn}
+        variant="outline"
+        size="large"
+        fullWidth
+        loading={anonymousLoading}
+        disabled={loading || anonymousLoading}
+        style={styles.anonymousButton}
       />
 
       <Button
         title="Don't have an account? Sign Up"
         onPress={() => router.push("/(auth)/sign-up")}
-        variant="outline"
+        variant="secondary"
         size="medium"
         fullWidth
         style={styles.linkButton}
@@ -87,10 +142,28 @@ export default function SignInScreen() {
 
 const styles = StyleSheet.create((theme) => ({
   title: {
+    marginBottom: 16,
+  },
+  subtitle: {
     marginBottom: 40,
+    lineHeight: 24,
+  },
+  input: {
+    marginBottom: 16,
+  },
+  forgotPassword: {
+    marginTop: 8,
+    marginBottom: 24,
   },
   button: {
     marginTop: 16,
+  },
+  orText: {
+    marginTop: 24,
+    marginBottom: 16,
+  },
+  anonymousButton: {
+    marginBottom: 24,
   },
   linkButton: {
     marginTop: 20,

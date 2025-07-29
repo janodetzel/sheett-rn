@@ -61,6 +61,34 @@ export const signIn = async ({
 };
 
 /**
+ * Sign in anonymously
+ */
+export const signInAnonymously = async (): Promise<AuthResult> => {
+  try {
+    const { error } = await supabase.auth.signInAnonymously();
+
+    if (error) {
+      return {
+        success: false,
+        error: {
+          message: error.message,
+          code: error.name,
+        },
+      };
+    }
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        message: "An unexpected error occurred during anonymous sign in",
+      },
+    };
+  }
+};
+
+/**
  * Sign up with email and password
  */
 export const signUp = async ({
@@ -225,6 +253,40 @@ export const updatePassword = async (password: string): Promise<AuthResult> => {
 };
 
 /**
+ * Link anonymous account with email and password
+ */
+export const linkAnonymousAccount = async ({
+  email,
+  password,
+}: SignUpParams): Promise<AuthResult> => {
+  try {
+    const { error } = await supabase.auth.updateUser({
+      email,
+      password,
+    });
+
+    if (error) {
+      return {
+        success: false,
+        error: {
+          message: error.message,
+          code: error.name,
+        },
+      };
+    }
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        message: "An unexpected error occurred while linking account",
+      },
+    };
+  }
+};
+
+/**
  * Validate email format
  */
 export const validateEmail = (email: string): boolean => {
@@ -276,4 +338,32 @@ export const handleAuthError = (
     return false;
   }
   return true;
+};
+
+/**
+ * Navigate to home screen after successful auth
+ */
+export const navigateToHome = () => {
+  router.replace("/(home)");
+};
+
+/**
+ * Navigate to sign in screen
+ */
+export const navigateToSignIn = () => {
+  router.replace("/(auth)/sign-in");
+};
+
+/**
+ * Navigate to sign up screen
+ */
+export const navigateToSignUp = () => {
+  router.push("/(auth)/sign-up");
+};
+
+/**
+ * Navigate to reset password screen
+ */
+export const navigateToResetPassword = () => {
+  router.push("/(auth)/reset-password");
 };
