@@ -16,6 +16,19 @@ import {
   validatePassword,
   handleAuthError,
 } from "../../utils/supabase/auth";
+import {
+  SpreadsheetStore,
+  useSpreadsheetValue,
+  useSpreadsheetCellIds,
+  useSpreadsheetCell,
+  useSpreadsheetCellValue,
+  useDelSpreadsheetCellCallback,
+  useSpreadsheetCollaborator,
+  useAddSpreadsheetCollaboratorCallback,
+  useDelSpreadsheetCollaboratorCallback,
+  rowIdColumnIdToCellId,
+  cellIdToRowIdColumnId,
+} from "@/src/utils/store/spreadsheet";
 
 export default function Home() {
   const spreadsheetIds = useSpreadsheetIds();
@@ -256,22 +269,170 @@ export default function Home() {
 const ListItem = ({ id }: { id: string }) => {
   const deleteSpreadsheet = useDelSpreadsheetCallback(id);
 
-  const handleDeleteSpreadsheet = (id: string) => {
-    deleteSpreadsheet(id);
+  return (
+    <View>
+      <View style={styles.spreadsheetItem}>
+        <Text variant="bodySmall" style={styles.spreadsheetId}>
+          Spreadsheet: {id}
+        </Text>
+        <Button
+          title="Delete"
+          onPress={deleteSpreadsheet}
+          variant="destructive"
+          size="small"
+          style={styles.deleteButton}
+        />
+      </View>
+      <View>
+        <SpreadsheetStore id={id} />
+        <SpreadsheetTestComponent id={id} />
+      </View>
+    </View>
+  );
+};
+
+// Test component for spreadsheet store functionalities
+const SpreadsheetTestComponent = ({ id }: { id: string }) => {
+  const [inc, setInc] = useState(1);
+  const [name, setName] = useSpreadsheetValue(id, "name");
+
+  const [description, setDescription] = useSpreadsheetValue(id, "description");
+
+  // Cell management
+  const cellIds = useSpreadsheetCellIds(id);
+  const addCollaborator = useAddSpreadsheetCollaboratorCallback(id);
+
+  const deleteCollaborator = useDelSpreadsheetCollaboratorCallback(
+    id,
+    "test-user-123"
+  );
+
+  const [collaborator, setCollaborator] = useSpreadsheetCollaborator(
+    id,
+    "test-user-123"
+  );
+
+  // Test cell operations
+  const testCellId = rowIdColumnIdToCellId(`row${inc}`, `col${inc}`);
+
+  const deleteCell = useDelSpreadsheetCellCallback(id, testCellId);
+
+  const [cellValue, setCellValue] = useSpreadsheetCellValue(
+    id,
+    testCellId,
+    "value"
+  );
+  const [cellRow, setCell] = useSpreadsheetCell(id, testCellId);
+
+  const handleAddTestCell = () => {
+    setCell({
+      rowId: `row${inc}`,
+      columnId: `col${inc}`,
+      value: "Test Cell Value",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      createdBy: "test-user",
+    });
+  };
+
+  const handleUpdateCellValue = () => {
+    setCellValue("Updated Cell Value");
+  };
+
+  const handleAddCollaborator = () => {
+    addCollaborator("test-user-123", "editor");
   };
 
   return (
-    <View style={styles.spreadsheetItem}>
-      <Text variant="bodySmall" style={styles.spreadsheetId}>
-        Spreadsheet: {id}
+    <View style={styles.testSection}>
+      <Text variant="h4" weight="semibold" style={styles.sectionTitle}>
+        Spreadsheet Store Test
       </Text>
-      <Button
-        title="Delete"
-        onPress={() => handleDeleteSpreadsheet(id)}
-        variant="destructive"
-        size="small"
-        style={styles.deleteButton}
-      />
+
+      {/* Basic value operations */}
+      <View style={styles.testGroup}>
+        <Text variant="bodySmall" weight="semibold">
+          Basic Values:
+        </Text>
+        <Text>Name: {name || "Not set"}</Text>
+        <Text>Description: {description || "Not set"}</Text>
+        <Button
+          title="Set Name"
+          onPress={() => setName("Test Spreadsheet")}
+          variant="secondary"
+          size="small"
+        />
+        <Button
+          title="Set Description"
+          onPress={() => setDescription("A test spreadsheet")}
+          variant="secondary"
+          size="small"
+        />
+      </View>
+
+      {/* Cell operations */}
+      <View style={styles.testGroup}>
+        <Text variant="bodySmall" weight="semibold">
+          Cell Operations:
+        </Text>
+        <Text>Cell Value: {cellValue || "Not set"}</Text>
+        <Text>Total Cells: {cellIds?.length || 0}</Text>
+        <Button
+          title="Add Test Cell"
+          onPress={handleAddTestCell}
+          variant="primary"
+          size="small"
+        />
+        <Button
+          title="Update Cell Value"
+          onPress={handleUpdateCellValue}
+          variant="primary"
+          size="small"
+        />
+        <Button
+          title="Delete Test Cell"
+          onPress={deleteCell}
+          variant="destructive"
+          size="small"
+        />
+      </View>
+
+      {/* Collaborator operations */}
+      <View style={styles.testGroup}>
+        <Text variant="bodySmall" weight="semibold">
+          Collaborator Operations:
+        </Text>
+        <Button
+          title="Add Test Collaborator"
+          onPress={handleAddCollaborator}
+          variant="outline"
+          size="small"
+        />
+        <Button
+          title="Delete Test Collaborator"
+          onPress={deleteCollaborator}
+          variant="destructive"
+          size="small"
+        />
+        <Button
+          title="Set Collaborators"
+          onPress={() =>
+            setCollaborator({
+              role: "viewer",
+            })
+          }
+        />
+        <Text>Collaborators: {JSON.stringify(collaborator)}</Text>
+      </View>
+
+      {/* Cell ID utilities */}
+      <View style={styles.testGroup}>
+        <Text variant="bodySmall" weight="semibold">
+          Cell ID Utilities:
+        </Text>
+        <Text>Generated Cell ID: {testCellId}</Text>
+        <Text>Parsed: {JSON.stringify(cellIdToRowIdColumnId(testCellId))}</Text>
+      </View>
     </View>
   );
 };
@@ -348,5 +509,20 @@ const styles = StyleSheet.create((theme) => ({
   },
   cancelButton: {
     flex: 1,
+  },
+  // Test component styles
+  testSection: {
+    backgroundColor: theme.colors.surface,
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: theme.colors.border.secondary,
+  },
+  testGroup: {
+    marginBottom: 16,
+    padding: 12,
+    backgroundColor: theme.colors.background,
+    borderRadius: 8,
   },
 }));

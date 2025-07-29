@@ -88,11 +88,17 @@ const cellIdToRowIdColumnId = (
   return [rowId, columnId];
 };
 
-const useSpreadsheetValue = (id: string, key: keyof SpreadsheetValues) => [
+const useSpreadsheetValue = <Key extends keyof SpreadsheetValues>(
+  id: string,
+  key: Key
+): [
+  Value<SpreadsheetValues, Key> | undefined,
+  (v: Value<SpreadsheetValues, Key>) => void
+] => [
   useValue(key, useSpreadsheetStoreId(id)),
   useSetValueCallback(
     key,
-    (v: Value<SpreadsheetValues, keyof SpreadsheetValues>) => v,
+    (v: Value<SpreadsheetValues, Key>) => v,
     [],
     useSpreadsheetStoreId(id)
   ),
@@ -108,7 +114,13 @@ const useSpreadsheetCellIds = (id: string, offset?: number, limit?: number) =>
     useSpreadsheetStoreId(id)
   );
 
-const useSpreadsheetCell = (id: string, cellId: string) => [
+const useSpreadsheetCell = (
+  id: string,
+  cellId: string
+): [
+  Row<SpreadsheetTables, "cells"> | undefined,
+  (row: Row<SpreadsheetTables, "cells">) => void
+] => [
   useRow("cells", cellId, useSpreadsheetStoreId(id)),
 
   useSetRowCallback(
@@ -123,24 +135,34 @@ const useSpreadsheetCell = (id: string, cellId: string) => [
 const useDelSpreadsheetCellCallback = (id: string, cellId: string) =>
   useDelRowCallback("cells", cellId, useSpreadsheetStoreId(id));
 
-const useSpreadsheetCellValue = (
+const useSpreadsheetCellValue = <Key extends keyof SpreadsheetCell>(
   id: string,
   cellId: string,
-  key: keyof SpreadsheetCell
-) => [
+  key: Key
+): [
+  Value<SpreadsheetCell, Key> | undefined,
+  (v: Value<SpreadsheetCell, Key>) => void
+] => [
   useCell("cells", cellId, key, useSpreadsheetStoreId(id)),
   useSetCellCallback(
     "cells",
     cellId,
     key,
-    (v: Value<SpreadsheetCell, keyof SpreadsheetCell>) => v,
+    (v: Value<SpreadsheetCell, Key>) => v,
     [],
     useSpreadsheetStoreId(id)
   ),
 ];
 
-const useSpreadsheetCollaborator = (id: string, userId: string) => [
+const useSpreadsheetCollaborator = (
+  id: string,
+  userId: string
+): [
+  Row<SpreadsheetTables, "collaborators"> | undefined,
+  (row: Row<SpreadsheetTables, "collaborators">) => void
+] => [
   useRow("collaborators", userId, useSpreadsheetStoreId(id)),
+
   useSetRowCallback(
     "collaborators",
     userId,
