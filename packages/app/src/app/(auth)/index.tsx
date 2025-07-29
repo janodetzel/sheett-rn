@@ -1,111 +1,79 @@
 import { Link } from "expo-router";
-import { Text, View, Pressable, ScrollView } from "react-native";
+import { Pressable, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { Colors } from "../../constants/Colors";
+import { Button, Text, Screen } from "../../components/ui";
 
 export default function Auth() {
   return (
-    <View style={styles.container}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
+    <Screen padding="large" centerContent>
+      {/* Header Section */}
+      <Text variant="h1" weight="bold" align="center" style={styles.title}>
+        Welcome to Sheett
+      </Text>
+      <Text
+        variant="body"
+        color="secondary"
+        align="center"
+        style={styles.subtitle}
       >
-        {/* Header Section */}
-        <View style={styles.header}>
-          <View style={styles.logoContainer}>
-            <Text style={styles.logoText}>📊</Text>
-          </View>
-          <Text style={styles.title}>Welcome to Sheett</Text>
-          <Text style={styles.subtitle}>
-            Your personal spreadsheet companion
-          </Text>
-        </View>
+        Your personal spreadsheet companion
+      </Text>
 
-        {/* Content Section */}
-        <View style={styles.content}>
-          <View style={styles.featureContainer}>
-            <Text style={styles.featureIcon}>✨</Text>
-            <Text style={styles.featureText}>Organize your data</Text>
-          </View>
-          <View style={styles.featureContainer}>
-            <Text style={styles.featureIcon}>🚀</Text>
-            <Text style={styles.featureText}>Sync across devices</Text>
-          </View>
-          <View style={styles.featureContainer}>
-            <Text style={styles.featureIcon}>🔒</Text>
-            <Text style={styles.featureText}>Secure & private</Text>
-          </View>
-        </View>
+      {/* Content Section */}
+      <Screen padding="none" style={styles.content}>
+        <FeatureCard icon="✨" text="Organize your data" />
+        <FeatureCard icon="🚀" text="Sync across devices" />
+        <FeatureCard icon="🔒" text="Secure & private" />
+      </Screen>
 
-        {/* Action Buttons */}
-        <View style={styles.actions}>
-          <Link href="/sign-in" asChild>
-            <Pressable style={styles.primaryButton}>
-              <Text style={styles.primaryButtonText}>Sign In</Text>
-            </Pressable>
-          </Link>
+      {/* Action Buttons */}
+      <Link href="/sign-in" asChild>
+        <Button
+          title="Sign In"
+          onPress={() => {}}
+          variant="primary"
+          size="large"
+          fullWidth
+          style={styles.primaryButton}
+        />
+      </Link>
 
-          <Link href="/sign-up" asChild>
-            <Pressable style={styles.secondaryButton}>
-              <Text style={styles.secondaryButtonText}>Create Account</Text>
-            </Pressable>
-          </Link>
-        </View>
-      </ScrollView>
-    </View>
+      <Link href="/sign-up" asChild>
+        <Button
+          title="Create Account"
+          onPress={() => {}}
+          variant="outline"
+          size="large"
+          fullWidth
+          style={styles.secondaryButton}
+        />
+      </Link>
+    </Screen>
   );
 }
 
+const FeatureCard = ({ icon, text }: { icon: string; text: string }) => (
+  <View style={styles.featureContainer}>
+    <Text style={styles.featureIcon}>{icon}</Text>
+    <Text variant="body" weight="medium" style={styles.featureText}>
+      {text}
+    </Text>
+  </View>
+);
+
 const styles = StyleSheet.create((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingTop: 60,
-    paddingBottom: 40,
-  },
-  header: {
-    alignItems: "center",
-    marginBottom: 60,
-  },
-  logoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: Colors.light.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 24,
-    shadowColor: Colors.light.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  logoText: {
-    fontSize: 32,
-  },
   title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: theme.colors.text.primary,
     marginBottom: 8,
-    textAlign: "center",
   },
   subtitle: {
-    fontSize: 16,
-    color: theme.colors.text.secondary,
-    textAlign: "center",
+    marginBottom: 40,
     lineHeight: 24,
   },
   content: {
     flex: 1,
     justifyContent: "center",
     gap: 24,
-    minHeight: 200,
   },
   featureContainer: {
     flexDirection: "row",
@@ -125,43 +93,12 @@ const styles = StyleSheet.create((theme) => ({
     marginRight: 16,
   },
   featureText: {
-    fontSize: 16,
-    color: theme.colors.text.primary,
-    fontWeight: "500",
-  },
-  actions: {
-    gap: 16,
-    marginTop: 40,
+    flex: 1,
   },
   primaryButton: {
-    backgroundColor: Colors.light.primary,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    alignItems: "center",
-    shadowColor: Colors.light.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  primaryButtonText: {
-    color: Colors.light.text.inverse,
-    fontSize: 16,
-    fontWeight: "600",
+    marginBottom: 16,
   },
   secondaryButton: {
-    backgroundColor: "transparent",
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: Colors.light.primary,
-  },
-  secondaryButtonText: {
-    color: Colors.light.primary,
-    fontSize: 16,
-    fontWeight: "600",
+    marginBottom: 0,
   },
 }));

@@ -1,23 +1,15 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-} from "react-native";
+import { Alert } from "react-native";
 import { router } from "expo-router";
-import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
 import { supabase } from "../../utils/supabase/client";
+import { Button, Text, Screen, TextInput } from "../../components/ui";
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { theme } = useUnistyles();
 
   const handleSignUp = async () => {
     if (!email || !password || !confirmPassword) {
@@ -68,111 +60,70 @@ export default function SignUpScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={stylesheet.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <View style={stylesheet.content}>
-        <Text style={stylesheet.title}>Create Account</Text>
+    <Screen padding="medium" scrollable={true}>
+      <Text variant="h1" weight="bold" align="center" style={styles.title}>
+        Create Account
+      </Text>
 
-        <TextInput
-          style={stylesheet.input}
-          placeholder="Email"
-          placeholderTextColor={theme.colors.text.tertiary}
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-          autoComplete="email"
-        />
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        autoComplete="email"
+        size="large"
+      />
 
-        <TextInput
-          style={stylesheet.input}
-          placeholder="Password"
-          placeholderTextColor={theme.colors.text.tertiary}
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          autoComplete="new-password"
-        />
+      <TextInput
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        autoComplete="new-password"
+        size="large"
+      />
 
-        <TextInput
-          style={stylesheet.input}
-          placeholder="Confirm Password"
-          placeholderTextColor={theme.colors.text.tertiary}
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
-          autoComplete="new-password"
-        />
+      <TextInput
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+        autoComplete="new-password"
+        size="large"
+      />
 
-        <TouchableOpacity
-          style={stylesheet.button}
-          onPress={handleSignUp}
-          disabled={loading}
-        >
-          <Text style={stylesheet.buttonText}>
-            {loading ? "Creating Account..." : "Sign Up"}
-          </Text>
-        </TouchableOpacity>
+      <Button
+        title={loading ? "Creating Account..." : "Sign Up"}
+        onPress={handleSignUp}
+        variant="primary"
+        size="large"
+        fullWidth
+        loading={loading}
+        disabled={loading}
+        style={styles.button}
+      />
 
-        <TouchableOpacity style={stylesheet.linkButton} onPress={handleSignIn}>
-          <Text style={stylesheet.linkText}>
-            Already have an account? Sign In
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+      <Button
+        title="Already have an account? Sign In"
+        onPress={handleSignIn}
+        variant="outline"
+        size="medium"
+        fullWidth
+        style={styles.linkButton}
+      />
+    </Screen>
   );
 }
 
-const stylesheet = StyleSheet.create((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  content: {
-    flex: 1,
-    justifyContent: "center",
-    paddingHorizontal: 20,
-  },
+const styles = StyleSheet.create((theme) => ({
   title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    textAlign: "center",
     marginBottom: 40,
-    color: theme.colors.text.primary,
-  },
-  input: {
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    marginBottom: 16,
-    fontSize: 16,
-    backgroundColor: theme.colors.background,
-    color: theme.colors.text.primary,
-    borderColor: theme.colors.border.primary,
   },
   button: {
-    height: 50,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
     marginTop: 16,
-    backgroundColor: theme.colors.interactive.primary,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "600",
   },
   linkButton: {
     marginTop: 20,
-    alignItems: "center",
-  },
-  linkText: {
-    fontSize: 16,
-    color: theme.colors.text.primary,
   },
 }));

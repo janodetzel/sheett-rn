@@ -25,21 +25,27 @@ export default function AuthLayout() {
         name="sign-in"
         options={{
           title: "Sign In",
-          headerShown: true,
+          headerShown: false,
+          presentation: "modal",
+          animation: "slide_from_bottom",
         }}
       />
       <Stack.Screen
         name="sign-up"
         options={{
           title: "Create Account",
-          headerShown: true,
+          headerShown: false,
+          presentation: "modal",
+          animation: "slide_from_bottom",
         }}
       />
       <Stack.Screen
         name="reset-password"
         options={{
           title: "Reset Password",
-          headerShown: true,
+          headerShown: false,
+          presentation: "modal",
+          animation: "slide_from_bottom",
         }}
       />
     </Stack>

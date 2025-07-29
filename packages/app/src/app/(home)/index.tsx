@@ -1,7 +1,6 @@
 import React from "react";
-import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Alert, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   useAddSpreadsheetCallback,
   useDelSpreadsheetCallback,
@@ -9,12 +8,12 @@ import {
   useSpreadsheetIds,
 } from "../../utils/store/user";
 import { supabase } from "../../utils/supabase";
+import { Button, Text, Screen } from "../../components/ui";
 
 export default function Home() {
   const spreadsheetIds = useSpreadsheetIds();
   const addSpreadsheet = useAddSpreadsheetCallback();
   const joinSpreadsheet = useJoinSpreadsheetCallback();
-  const insets = useSafeAreaInsets();
 
   const handleSignOut = async () => {
     try {
@@ -35,6 +34,7 @@ export default function Home() {
       console.error(error);
     }
   };
+
   const handleAddSpreadsheet = () => {
     try {
       joinSpreadsheet("d0de4cee-c629-4d75-aff5-32b0693e0cee");
@@ -44,47 +44,63 @@ export default function Home() {
   };
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={[
-          styles.scrollContent,
-          { paddingBottom: insets.bottom },
-        ]}
-        showsVerticalScrollIndicator={false}
+    <Screen padding="medium">
+      <Text variant="h2" weight="bold" align="center" style={styles.title}>
+        Welcome to Sheett
+      </Text>
+      <Text
+        variant="body"
+        color="secondary"
+        align="center"
+        style={styles.subtitle}
       >
-        <Text style={styles.title}>Welcome to Sheett</Text>
-        <Text style={styles.subtitle}>Manage your spreadsheets</Text>
+        Manage your spreadsheets
+      </Text>
 
-        <TouchableOpacity
-          style={styles.createButton}
-          onPress={handleCreateSpreadsheet}
-        >
-          <Text style={styles.createButtonText}>Create New Spreadsheet</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.createButton}
-          onPress={handleAddSpreadsheet}
-        >
-          <Text style={styles.createButtonText}>Join Spreadsheet</Text>
-        </TouchableOpacity>
+      <Button
+        title="Create New Spreadsheet"
+        onPress={handleCreateSpreadsheet}
+        variant="primary"
+        size="large"
+        fullWidth
+        style={styles.createButton}
+      />
 
-        <View style={styles.spreadsheetsSection}>
-          <Text style={styles.sectionTitle}>Your Spreadsheets</Text>
-          {spreadsheetIds.length === 0 ? (
-            <Text style={styles.emptyText}>
-              No spreadsheets yet. Create one to get started!
-            </Text>
-          ) : (
-            spreadsheetIds.map((id) => <ListItem key={id} id={id} />)
-          )}
-        </View>
+      <Button
+        title="Join Spreadsheet"
+        onPress={handleAddSpreadsheet}
+        variant="secondary"
+        size="large"
+        fullWidth
+        style={styles.createButton}
+      />
 
-        <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
-          <Text style={styles.signOutButtonText}>Sign Out</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+      <View style={styles.spreadsheetsSection}>
+        <Text variant="h4" weight="semibold" style={styles.sectionTitle}>
+          Your Spreadsheets
+        </Text>
+        {spreadsheetIds.length === 0 ? (
+          <Text
+            variant="bodySmall"
+            color="tertiary"
+            align="center"
+            style={styles.emptyText}
+          >
+            No spreadsheets yet. Create one to get started!
+          </Text>
+        ) : (
+          spreadsheetIds.map((id) => <ListItem key={id} id={id} />)
+        )}
+      </View>
+
+      <Button
+        title="Sign Out"
+        onPress={handleSignOut}
+        variant="destructive"
+        size="medium"
+        style={styles.signOutButton}
+      />
+    </Screen>
   );
 }
 
@@ -95,82 +111,46 @@ const ListItem = ({ id }: { id: string }) => {
     deleteSpreadsheet(id);
   };
 
-  console.log(id);
-
   return (
-    <View key={id} style={styles.spreadsheetItem}>
-      <Text style={styles.spreadsheetId}>Spreadsheet: {id}</Text>
-      <TouchableOpacity
-        style={styles.deleteButton}
+    <View style={styles.spreadsheetItem}>
+      <Text variant="bodySmall" style={styles.spreadsheetId}>
+        Spreadsheet: {id}
+      </Text>
+      <Button
+        title="Delete"
         onPress={() => handleDeleteSpreadsheet(id)}
-      >
-        <Text style={styles.deleteButtonText}>Delete</Text>
-      </TouchableOpacity>
+        variant="destructive"
+        size="small"
+        style={styles.deleteButton}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 40,
-  },
   title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    textAlign: "center",
     marginBottom: 16,
-    color: theme.colors.text.primary,
   },
   subtitle: {
-    fontSize: 16,
-    textAlign: "center",
     marginBottom: 40,
-    color: theme.colors.text.primary,
-    opacity: 0.7,
   },
   createButton: {
-    backgroundColor: theme.colors.interactive.primary,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: "center",
-    marginBottom: 30,
-  },
-  createButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "600",
+    marginBottom: 16,
   },
   spreadsheetsSection: {
     marginBottom: 30,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
     marginBottom: 16,
-    color: theme.colors.text.primary,
   },
   emptyText: {
-    fontSize: 14,
-    textAlign: "center",
-    color: theme.colors.text.primary,
-    opacity: 0.6,
     fontStyle: "italic",
   },
   spreadsheetItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.surface,
     padding: 16,
     borderRadius: 8,
     marginBottom: 12,
@@ -178,34 +158,13 @@ const styles = StyleSheet.create((theme) => ({
     borderColor: theme.colors.border.primary,
   },
   spreadsheetId: {
-    fontSize: 14,
-    color: theme.colors.text.primary,
     flex: 1,
   },
   deleteButton: {
-    backgroundColor: theme.colors.interactive.destructive,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 6,
     marginLeft: 12,
   },
-  deleteButtonText: {
-    color: "white",
-    fontSize: 12,
-    fontWeight: "600",
-  },
   signOutButton: {
-    backgroundColor: theme.colors.interactive.destructive,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
-    minWidth: 120,
-    alignItems: "center",
     alignSelf: "center",
-  },
-  signOutButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "600",
+    minWidth: 120,
   },
 }));
