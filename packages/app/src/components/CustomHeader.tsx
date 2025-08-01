@@ -109,8 +109,8 @@ const styles = StyleSheet.create((theme) => ({
   backButton: {
     width: 40,
     height: 40,
-    borderRadius: 20,
-    backgroundColor: theme.colors.background,
+    borderRadius: theme.borderRadius,
+    backgroundColor: theme.colors.text.primary,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: theme.colors.border.primary,
@@ -122,7 +122,7 @@ const styles = StyleSheet.create((theme) => ({
   minimalBackButton: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: theme.borderRadius,
     backgroundColor: theme.colors.text.primary,
     justifyContent: "center",
     alignItems: "center",

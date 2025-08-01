@@ -16,6 +16,7 @@ import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect, useState } from "react";
 import { SessionProvider, useSession } from "../utils/supabase";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { getRouteInfoFromState } from "expo-router/build/global-state/routeInfo";
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();

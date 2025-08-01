@@ -29,6 +29,7 @@ import {
   rowIdColumnIdToCellId,
   cellIdToRowIdColumnId,
 } from "@/src/utils/store/spreadsheet";
+import { useRouter } from "expo-router";
 
 export default function Home() {
   const spreadsheetIds = useSpreadsheetIds();
@@ -112,7 +113,7 @@ export default function Home() {
                 setConfirmPassword("");
               },
             },
-          ]
+          ],
         );
       }
     } finally {
@@ -269,12 +270,21 @@ export default function Home() {
 const ListItem = ({ id }: { id: string }) => {
   const deleteSpreadsheet = useDelSpreadsheetCallback(id);
 
+  const router = useRouter();
+
   return (
     <View>
       <View style={styles.spreadsheetItem}>
         <Text variant="bodySmall" style={styles.spreadsheetId}>
           Spreadsheet: {id}
         </Text>
+        <Button
+          title="Open"
+          onPress={() => router.navigate(`./sheett/${id}`)}
+          variant="primary"
+          size="small"
+          style={styles.deleteButton}
+        />
         <Button
           title="Delete"
           onPress={deleteSpreadsheet}
@@ -284,8 +294,8 @@ const ListItem = ({ id }: { id: string }) => {
         />
       </View>
       <View>
-        <SpreadsheetStore id={id} />
-        <SpreadsheetTestComponent id={id} />
+        {/* <SpreadsheetStore id={id} /> */}
+        {/* <SpreadsheetTestComponent id={id} /> */}
       </View>
     </View>
   );
@@ -304,12 +314,12 @@ const SpreadsheetTestComponent = ({ id }: { id: string }) => {
 
   const deleteCollaborator = useDelSpreadsheetCollaboratorCallback(
     id,
-    "test-user-123"
+    "test-user-123",
   );
 
   const [collaborator, setCollaborator] = useSpreadsheetCollaborator(
     id,
-    "test-user-123"
+    "test-user-123",
   );
 
   // Test cell operations
@@ -320,7 +330,7 @@ const SpreadsheetTestComponent = ({ id }: { id: string }) => {
   const [cellValue, setCellValue] = useSpreadsheetCellValue(
     id,
     testCellId,
-    "value"
+    "value",
   );
   const [cellRow, setCell] = useSpreadsheetCell(id, testCellId);
 
