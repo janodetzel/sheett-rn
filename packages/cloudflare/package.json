@@ -3,9 +3,9 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"cf:deploy": "wrangler deploy",
+		"start:cf": "wrangler dev",
 		"cf:dev": "wrangler dev",
-		"cf:start": "wrangler dev",
+		"cf:deploy": "wrangler deploy",
 		"cf:typegen": "wrangler types"
 	},
 	"devDependencies": {
