@@ -2225,6 +2225,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@legendapp/list@npm:^1.1.4":
+  version: 1.1.4
+  resolution: "@legendapp/list@npm:1.1.4"
+  dependencies:
+    use-sync-external-store: "npm:^1.5.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/add14842533c2a50de36c9e019620b982e6fb76e1133258c1f959371180cb2d81a5436e2c3228987ef278efe18187282e6357d5b195b75b0add5fe7d0246902e
+  languageName: node
+  linkType: hard
+
 "@napi-rs/wasm-runtime@npm:^0.2.11":
   version: 0.2.12
   resolution: "@napi-rs/wasm-runtime@npm:0.2.12"
@@ -3500,6 +3512,7 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.25.2"
     "@expo/vector-icons": "npm:^14.1.0"
+    "@legendapp/list": "npm:^1.1.4"
     "@react-native-async-storage/async-storage": "npm:2.1.2"
     "@react-navigation/bottom-tabs": "npm:^7.3.10"
     "@react-navigation/elements": "npm:^2.3.8"

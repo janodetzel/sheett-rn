@@ -10,11 +10,11 @@ export const useSheettRouteParams = () =>
   useLocalSearchParams<SheettRouteParams>();
 
 export default function SheettLayout() {
-  const { id } = useSheettRouteParams();
+  // const { id } = useSheettRouteParams();
 
   return (
     <>
-      <SpreadsheetStore id={id} />
+      {/* <SpreadsheetStore id={id} /> */}
       <Stack
         screenOptions={{
           headerShown: true,

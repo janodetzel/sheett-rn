@@ -29,7 +29,7 @@ import {
   rowIdColumnIdToCellId,
   cellIdToRowIdColumnId,
 } from "@/src/utils/store/spreadsheet";
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 export default function Home() {
   const spreadsheetIds = useSpreadsheetIds();
