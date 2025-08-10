@@ -6937,12 +6937,12 @@ __metadata:
 
 "expo-spreadsheet@file:../expo-spreadsheet::locator=app%40workspace%3Apackages%2Fapp":
   version: 0.1.0
-  resolution: "expo-spreadsheet@file:../expo-spreadsheet#../expo-spreadsheet::hash=9db9b3&locator=app%40workspace%3Apackages%2Fapp"
+  resolution: "expo-spreadsheet@file:../expo-spreadsheet#../expo-spreadsheet::hash=25ac11&locator=app%40workspace%3Apackages%2Fapp"
   peerDependencies:
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 10c0/7bfc8a01a7884df6944199b0a2d35e60d27854bf63f5e92b4de8f2b030a86b9340cc6ed4160065dc63273ad94fc2f937cd21b5f49792705fc0b6e8a60a29443f
+  checksum: 10c0/175e76386a290f210be2d4d0e28670caf09221e88b987de73492209c039586ab50281450e2ead58038b2e82969e74410ca6d0f66aad00cb6de1fdb5b632b43d0
   languageName: node
   linkType: hard
 

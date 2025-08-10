@@ -320,6 +320,9 @@ PODS:
     - Yoga
   - ExpoSplashScreen (0.30.10):
     - ExpoModulesCore
+  - ExpoSpreadsheet (0.1.0):
+    - ExpoModulesCore
+    - SpreadsheetView
   - ExpoSQLite (15.2.14):
     - ExpoModulesCore
   - ExpoSymbols (0.4.5):
@@ -2408,6 +2411,7 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
   - SocketRocket (0.7.1)
+  - SpreadsheetView (0.9.1)
   - Unistyles (3.0.7):
     - DoubleConversion
     - glog
@@ -2458,6 +2462,7 @@ DEPENDENCIES:
   - ExpoLinking (from `../../../node_modules/expo-linking/ios`)
   - ExpoModulesCore (from `../../../node_modules/expo-modules-core`)
   - ExpoSplashScreen (from `../../../node_modules/expo-splash-screen/ios`)
+  - ExpoSpreadsheet (from `../../../node_modules/expo-spreadsheet/ios`)
   - ExpoSQLite (from `../../../node_modules/expo-sqlite/ios`)
   - ExpoSymbols (from `../../../node_modules/expo-symbols/ios`)
   - ExpoSystemUI (from `../../../node_modules/expo-system-ui/ios`)
@@ -2553,6 +2558,7 @@ SPEC REPOS:
     - SDWebImageSVGCoder
     - SDWebImageWebPCoder
     - SocketRocket
+    - SpreadsheetView
 
 EXTERNAL SOURCES:
   boost:
@@ -2599,6 +2605,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/expo-modules-core"
   ExpoSplashScreen:
     :path: "../../../node_modules/expo-splash-screen/ios"
+  ExpoSpreadsheet:
+    :path: "../../../node_modules/expo-spreadsheet/ios"
   ExpoSQLite:
     :path: "../../../node_modules/expo-sqlite/ios"
   ExpoSymbols:
@@ -2788,6 +2796,7 @@ SPEC CHECKSUMS:
   ExpoLinking: d5c183998ca6ada66ff45e407e0f965b398a8902
   ExpoModulesCore: 00a1b5c73248465bd0b93f59f8538c4573dac579
   ExpoSplashScreen: 0ad5acac1b5d2953c6e00d4319f16d616f70d4dd
+  ExpoSpreadsheet: 026c15900714995736ea1a1a340acf40cabc53f0
   ExpoSQLite: 5de74f7a3402d8e800d37c13e9bc3601396b8123
   ExpoSymbols: c5612a90fb9179cdaebcd19bea9d8c69e5d3b859
   ExpoSystemUI: c2724f9d5af6b1bb74e013efadf9c6a8fae547a2
@@ -2876,6 +2885,7 @@ SPEC CHECKSUMS:
   SDWebImageSVGCoder: 15a300a97ec1c8ac958f009c02220ac0402e936c
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  SpreadsheetView: 688dbd19f2b355df0eb09e486266fd913a013449
   Unistyles: bc5db58d33d165fb55c76e9f350b4b672ba2e4d5
   Yoga: c758bfb934100bb4bf9cbaccb52557cee35e8bdf
 

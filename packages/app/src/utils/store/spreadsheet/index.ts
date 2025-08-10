@@ -44,7 +44,7 @@ type Schemas = [
 
 type SpreadsheetValues = typeof SPREADSHEET_STORE_VALUES_SCHEMA;
 
-type SpreadsheetTables = typeof SPREADSHEET_STORE_TABLE_SCHEMA;
+export type SpreadsheetTables = typeof SPREADSHEET_STORE_TABLE_SCHEMA;
 type SpreadsheetCell = SpreadsheetTables["cells"];
 type SpreadsheetCollaborator = SpreadsheetTables["collaborators"];
 
@@ -131,6 +131,30 @@ const useSpreadsheetCell = (
     useSpreadsheetStoreId(id)
   ),
 ];
+
+const useGetSpreadsheetCellCallback = (id: string) => {
+  const storeId = useSpreadsheetStoreId(id);
+  const store = useStore(storeId);
+
+  return useCallback(
+    (cellId: string): Row<SpreadsheetTables, "cells"> | undefined => {
+      return store?.getRow("cells", cellId);
+    },
+    [store]
+  );
+};
+
+const useSetSpreadsheetCellCallback = (id: string) => {
+  const storeId = useSpreadsheetStoreId(id);
+  const store = useStore(storeId);
+
+  return useCallback(
+    (cellId: string, value: Row<SpreadsheetTables, "cells">) => {
+      store?.setRow("cells", cellId, value);
+    },
+    [store]
+  );
+};
 
 const useDelSpreadsheetCellCallback = (id: string, cellId: string) =>
   useDelRowCallback("cells", cellId, useSpreadsheetStoreId(id));
@@ -221,6 +245,8 @@ const SpreadsheetStore = ({ id }: { id: string }) => {
 
 export {
   SpreadsheetStore,
+  useGetSpreadsheetCellCallback,
+  useSetSpreadsheetCellCallback,
   useSpreadsheetCellIds,
   useDelSpreadsheetCellCallback,
   useSpreadsheetCell,
