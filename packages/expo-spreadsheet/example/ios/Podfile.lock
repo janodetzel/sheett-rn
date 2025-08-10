@@ -65,6 +65,7 @@ PODS:
     - Yoga
   - ExpoSpreadsheet (0.1.0):
     - ExpoModulesCore
+    - SpreadsheetView
   - fast_float (6.1.4)
   - FBLazyVector (0.79.5)
   - fmt (11.0.2)
@@ -1719,6 +1720,7 @@ PODS:
     - React-perflogger (= 0.79.5)
     - React-utils (= 0.79.5)
   - SocketRocket (0.7.1)
+  - SpreadsheetView (0.9.1)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1806,6 +1808,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - SocketRocket
+    - SpreadsheetView
 
 EXTERNAL SOURCES:
   boost:
@@ -1976,7 +1979,7 @@ SPEC CHECKSUMS:
   ExpoFont: cf508bc2e6b70871e05386d71cab927c8524cc8e
   ExpoKeepAwake: bf0811570c8da182bfb879169437d4de298376e7
   ExpoModulesCore: 00a1b5c73248465bd0b93f59f8538c4573dac579
-  ExpoSpreadsheet: 8566c6ddb4f634e2c0c53790a9a8dfb31985bc8e
+  ExpoSpreadsheet: 026c15900714995736ea1a1a340acf40cabc53f0
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: d2a9cd223302b6c9aa4aa34c1a775e9db609eb52
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
@@ -2045,6 +2048,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 6cb6e0d0b52471abc883541c76589d1c367c64c7
   ReactCommon: 1ab5451fc5da87c4cc4c3046e19a8054624ca763
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  SpreadsheetView: 688dbd19f2b355df0eb09e486266fd913a013449
   Yoga: adb397651e1c00672c12e9495babca70777e411e
 
 PODFILE CHECKSUM: 7e71b628850e126dd8f132f3e958af154a1cb098

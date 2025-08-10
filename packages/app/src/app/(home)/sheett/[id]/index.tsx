@@ -21,20 +21,20 @@ const ROWS = 256;
 const COLS = 256;
 
 // Generate column headers (A, B, C, ..., Z, AA, AB, ...)
-// const generateColumnHeaders = () => {
-//   const headers = [];
-//   for (let i = 0; i < COLS; i++) {
-//     let header = "";
-//     let num = i;
-//     while (num >= 0) {
-//       header = String.fromCharCode(65 + (num % 26)) + header;
-//       num = Math.floor(num / 26) - 1;
-//       if (num < 0) break;
-//     }
-//     headers.push(header);
-//   }
-//   return headers;
-// };
+const generateColumnHeaders = () => {
+  const headers = [];
+  for (let i = 0; i < COLS; i++) {
+    let header = "";
+    let num = i;
+    while (num >= 0) {
+      header = String.fromCharCode(65 + (num % 26)) + header;
+      num = Math.floor(num / 26) - 1;
+      if (num < 0) break;
+    }
+    headers.push(header);
+  }
+  return headers;
+};
 
 // Generate row headers (1, 2, 3, ..., 256)
 const generateRowHeaders = () => {

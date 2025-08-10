@@ -20,7 +20,7 @@ public class ExpoSpreadsheetModule: Module {
 
     // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
     Function("hello") {
-      return "Hello world! 👋"
+      return "Hello world! This is a test"
     }
 
     // Defines a JavaScript function that always returns a Promise and whose native code
@@ -35,14 +35,55 @@ public class ExpoSpreadsheetModule: Module {
     // Enables the module to be used as a native view. Definition components that are accepted as part of the
     // view definition: Prop, Events.
     View(ExpoSpreadsheetView.self) {
-      // Defines a setter for the `url` prop.
-      Prop("url") { (view: ExpoSpreadsheetView, url: URL) in
-        if view.webView.url != url {
-          view.webView.load(URLRequest(url: url))
-        }
+      Prop("rows") { (view: ExpoSpreadsheetView, rows: Int) in
+        view.numberOfRows = max(0, rows)
       }
 
-      Events("onLoad")
+      Prop("columns") { (view: ExpoSpreadsheetView, columns: Int) in
+        view.numberOfColumns = max(0, columns)
+      }
+
+      Prop("cellWidth") { (view: ExpoSpreadsheetView, width: Double) in
+        view.cellWidth = max(1.0, CGFloat(width))
+      }
+
+      Prop("cellHeight") { (view: ExpoSpreadsheetView, height: Double) in
+        view.cellHeight = max(1.0, CGFloat(height))
+      }
+
+      Prop("value") { (view: ExpoSpreadsheetView, value: [[String: Any]]) in
+        view.setInitialValues(value)
+      }
+
+      Prop("showHeaders") { (view: ExpoSpreadsheetView, show: Bool) in
+        view.showHeaders = show
+      }
+
+      Prop("infiniteScrollHorizontal") { (view: ExpoSpreadsheetView, enabled: Bool) in
+        view.infiniteScrollHorizontal = enabled
+      }
+
+      Prop("infiniteScrollVertical") { (view: ExpoSpreadsheetView, enabled: Bool) in
+        view.infiniteScrollVertical = enabled
+      }
+
+      Prop("gridStyle") { (view: ExpoSpreadsheetView, style: [String: Any]) in
+        view.applyGridStyle(style)
+      }
+
+      Prop("intercellSpacing") { (view: ExpoSpreadsheetView, spacing: [String: Any]) in
+        view.applyIntercellSpacing(spacing)
+      }
+
+      Prop("headerStyle") { (view: ExpoSpreadsheetView, style: [String: Any]) in
+        view.applyHeaderStyle(style)
+      }
+
+      Prop("cellStyle") { (view: ExpoSpreadsheetView, style: [String: Any]) in
+        view.applyCellStyle(style)
+      }
+
+      Events("onCellEdited")
     }
   }
 }
