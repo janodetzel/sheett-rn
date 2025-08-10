@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["ExpoSpreadsheetModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.spreadsheet.ExpoSpreadsheetModule"]
+  }
+}
