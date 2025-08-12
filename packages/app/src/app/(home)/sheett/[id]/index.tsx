@@ -14,6 +14,7 @@ import {
 import { useSession } from "@/src/utils/supabase";
 import { useSheettRouteParams } from "./_layout";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFocusEffect } from "expo-router";
 
 const CELL_SIZE = 40;
 const ROWS = 100;
@@ -32,26 +33,24 @@ const Cell = React.memo(function Cell({
   r: number;
   c: number;
 }) {
-  const cellId = useMemo(
-    () => rowIdColumnIdToCellId(String(r), String(c)),
-    [r, c]
-  );
+  const session = useSession();
+  const currentUserId = session?.user.id ?? "";
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const cellId = rowIdColumnIdToCellId(String(r), String(c));
 
   const [cellValue, setCellValue] = useSpreadsheetCellValue(
     spreadsheetId,
     cellId,
     "value"
   );
-  const [lockedBy] = useSpreadsheetCellValue(spreadsheetId, cellId, "lockedBy");
 
-  const { lockCell, unlockCell } = useLockCellCallbacks(spreadsheetId);
-
-  const session = useSession();
-  const currentUserId = session?.user.id ?? "";
-
-  const [isEditing, setIsEditing] = useState(false);
-
-  const isLocked = lockedBy && lockedBy !== currentUserId;
+  const { isLocked, lockCell, unlockCell } = useLockCellCallbacks(
+    spreadsheetId,
+    currentUserId,
+    cellId
+  );
 
   return (
     <View
@@ -77,11 +76,11 @@ const Cell = React.memo(function Cell({
             return;
           }
           setIsEditing(true);
-          lockCell(cellId, currentUserId);
+          lockCell();
         }}
         onBlur={() => {
           setIsEditing(false);
-          unlockCell(cellId, currentUserId);
+          unlockCell();
         }}
         focusable={!isLocked}
         editable={!isLocked}

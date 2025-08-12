@@ -9,8 +9,9 @@ import {
 import { useSession } from "../../supabase";
 import { useCreateClientPersisterAndStart } from "../helpers/persistence";
 import { useCreateServerSynchronizerAndStart } from "../helpers/sync";
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useStore } from "tinybase/ui-react";
+import { useFocusEffect } from "expo-router";
 
 const SPREADSHEET_STORE_PREFIX = "spreadsheetStore-";
 
@@ -67,6 +68,7 @@ const {
   // useAddRowCallback, // not used currently
   useSortedRowIds,
   useSetRowCallback,
+  useSetPartialRowCallback,
   useDelRowCallback,
 
   useCell,
@@ -180,34 +182,72 @@ const useSpreadsheetCellValue = <Key extends keyof SpreadsheetCell>(
   ),
 ];
 
-const useLockCellCallbacks = (id: string) => {
-  const storeId = useSpreadsheetStoreId(id);
-  const store = useStore(storeId);
+const useLockCellCallbacks = (id: string, userId: string, cellId: string) => {
+  const [lockedBy] = useSpreadsheetCellValue(id, cellId, "lockedBy");
+  const [lockedAt] = useSpreadsheetCellValue(id, cellId, "lockedAt");
 
-  const lockCell = useCallback(
-    (cellId: string, userId: string) => {
-      store?.setPartialRow("cells", cellId, {
-        lockedBy: userId,
-        lockedAt: new Date().toISOString(),
-      } as any);
-    },
-    [store]
+  const setPartialRow = useSetPartialRowCallback(
+    "cells",
+    cellId,
+    (row: Row<SpreadsheetTables, "cells">) => row,
+    [],
+    useSpreadsheetStoreId(id)
   );
 
-  const unlockCell = useCallback(
-    (cellId: string, userId: string) => {
-      const current = store?.getRow("cells", cellId) as any;
-      if (current?.lockedBy === userId) {
-        store?.setPartialRow("cells", cellId, {
+  // const tenSecondsAgo = new Date(Date.now() - 10 * 1000).toISOString();
+  const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+
+  useFocusEffect(
+    useCallback(() => {
+      // NOTE: if the cell is locked for more than 10 minutes, unlock it
+      if (lockedAt && lockedAt < tenMinutesAgo) {
+        setPartialRow({
           lockedBy: "",
           lockedAt: "",
-        } as any);
+        });
       }
-    },
-    [store]
+
+      return () => {
+        // NOTE: if the cell is locked by the current user, unlock it
+        if (lockedBy && lockedBy === userId) {
+          setPartialRow({
+            lockedBy: "",
+            lockedAt: "",
+          });
+        }
+      };
+    }, [lockedAt, tenMinutesAgo, setPartialRow, lockedBy, userId])
   );
 
-  return { lockCell, unlockCell };
+  const isLocked = useMemo(
+    () =>
+      !!lockedBy && lockedBy !== userId && lockedAt && lockedAt > tenMinutesAgo,
+    [lockedBy, userId, lockedAt, tenMinutesAgo]
+  );
+
+  const lockCell = useCallback(() => {
+    if (isLocked) {
+      return;
+    }
+
+    setPartialRow({
+      lockedBy: userId,
+      lockedAt: new Date().toISOString(),
+    });
+  }, [setPartialRow, isLocked, userId]);
+
+  const unlockCell = useCallback(() => {
+    if (isLocked) {
+      return;
+    }
+
+    setPartialRow({
+      lockedBy: "",
+      lockedAt: "",
+    });
+  }, [setPartialRow, isLocked]);
+
+  return { isLocked, lockCell, unlockCell };
 };
 
 const useSpreadsheetCollaborator = (
