@@ -111,79 +111,81 @@ export default function Sheett() {
   }, []);
 
   return (
-    <SafeAreaView edges={["bottom"]} style={styles.container}>
-      <SpreadsheetStore id={spreadsheetId} />
-      <View style={styles.sheetArea}>
-        {/* Left sticky column */}
-        <View style={styles.leftPane}>
-          <View style={[styles.cornerCell, styles.headerCellBorder]}>
-            <Text style={styles.headerText}>#</Text>
-          </View>
-          <Animated.FlatList
-            ref={rowHeaderListRef}
-            data={rowIndices}
-            keyExtractor={(i) => `row-${i}`}
-            renderItem={({ item: r }) => (
-              <View style={[styles.rowHeaderCell, styles.headerCellBorder]}>
-                <Text style={styles.headerText}>{r + 1}</Text>
-              </View>
-            )}
-            getItemLayout={(_, index) => ({
-              length: CELL_SIZE,
-              offset: index * CELL_SIZE,
-              index,
-            })}
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
-            scrollToOverflowEnabled={true}
-          />
-        </View>
-
-        {/* Right scrollable area */}
-        <View style={styles.rightPane}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            bounces={false}
-          >
-            <View>
-              {/* Column headers */}
-              <View style={styles.columnHeaderRow}>
-                {colIndices.map((c) => (
-                  <View
-                    key={`col-${c}`}
-                    style={[styles.columnHeaderCell, styles.headerCellBorder]}
-                  >
-                    <Text style={styles.headerText}>{getColumnLabel(c)}</Text>
-                  </View>
-                ))}
-              </View>
-
-              {/* Grid */}
-              <Animated.FlatList
-                bounces={true}
-                ref={gridListRef}
-                data={data}
-                keyExtractor={keyExtractor}
-                renderItem={renderItem}
-                numColumns={COLS}
-                windowSize={9}
-                maxToRenderPerBatch={90}
-                initialNumToRender={120}
-                updateCellsBatchingPeriod={16}
-                removeClippedSubviews
-                getItemLayout={getItemLayout}
-                showsVerticalScrollIndicator={false}
-                onScroll={onGridScroll}
-                scrollEventThrottle={16}
-                contentContainerStyle={styles.grid}
-                style={{ width: COLS * CELL_SIZE * 2 }}
-              />
+    <View style={styles.container}>
+      <SafeAreaView edges={["bottom"]} style={styles.safeArea}>
+        <SpreadsheetStore id={spreadsheetId} />
+        <View style={styles.sheetArea}>
+          {/* Left sticky column */}
+          <View style={styles.leftPane}>
+            <View style={[styles.cornerCell, styles.headerCellBorder]}>
+              <Text style={styles.headerText}>#</Text>
             </View>
-          </ScrollView>
+            <Animated.FlatList
+              ref={rowHeaderListRef}
+              data={rowIndices}
+              keyExtractor={(i) => `row-${i}`}
+              renderItem={({ item: r }) => (
+                <View style={[styles.rowHeaderCell, styles.headerCellBorder]}>
+                  <Text style={styles.headerText}>{r + 1}</Text>
+                </View>
+              )}
+              getItemLayout={(_, index) => ({
+                length: CELL_SIZE,
+                offset: index * CELL_SIZE,
+                index,
+              })}
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+              scrollToOverflowEnabled={true}
+            />
+          </View>
+
+          {/* Right scrollable area */}
+          <View style={styles.rightPane}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              bounces={false}
+            >
+              <View>
+                {/* Column headers */}
+                <View style={styles.columnHeaderRow}>
+                  {colIndices.map((c) => (
+                    <View
+                      key={`col-${c}`}
+                      style={[styles.columnHeaderCell, styles.headerCellBorder]}
+                    >
+                      <Text style={styles.headerText}>{getColumnLabel(c)}</Text>
+                    </View>
+                  ))}
+                </View>
+
+                {/* Grid */}
+                <Animated.FlatList
+                  bounces={true}
+                  ref={gridListRef}
+                  data={data}
+                  keyExtractor={keyExtractor}
+                  renderItem={renderItem}
+                  numColumns={COLS}
+                  windowSize={9}
+                  maxToRenderPerBatch={90}
+                  initialNumToRender={120}
+                  updateCellsBatchingPeriod={16}
+                  removeClippedSubviews
+                  getItemLayout={getItemLayout}
+                  showsVerticalScrollIndicator={false}
+                  onScroll={onGridScroll}
+                  scrollEventThrottle={16}
+                  contentContainerStyle={styles.grid}
+                  style={{ width: COLS * CELL_SIZE * 2 }}
+                />
+              </View>
+            </ScrollView>
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 }
 
@@ -191,6 +193,9 @@ const styles = StyleSheet.create((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
+  },
+  safeArea: {
+    flex: 1,
   },
   sheetArea: {
     flex: 1,
