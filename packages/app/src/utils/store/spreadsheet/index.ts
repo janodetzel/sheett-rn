@@ -28,6 +28,8 @@ const SPREADSHEET_STORE_TABLE_SCHEMA = {
     rowId: { type: "string" },
     columnId: { type: "string" },
     value: { type: "string" },
+    lockedBy: { type: "string" },
+    lockedAt: { type: "string" },
     createdAt: { type: "string" },
     updatedAt: { type: "string" },
     createdBy: { type: "string" },
@@ -46,7 +48,7 @@ type SpreadsheetValues = typeof SPREADSHEET_STORE_VALUES_SCHEMA;
 
 export type SpreadsheetTables = typeof SPREADSHEET_STORE_TABLE_SCHEMA;
 type SpreadsheetCell = SpreadsheetTables["cells"];
-type SpreadsheetCollaborator = SpreadsheetTables["collaborators"];
+// type SpreadsheetCollaborator = SpreadsheetTables["collaborators"];
 
 const SPREADSHEET_COLLABORATOR_ROLES = {
   owner: "owner",
@@ -62,7 +64,7 @@ const {
   useSetValueCallback,
 
   useRow,
-  useAddRowCallback,
+  // useAddRowCallback, // not used currently
   useSortedRowIds,
   useSetRowCallback,
   useDelRowCallback,
@@ -178,6 +180,36 @@ const useSpreadsheetCellValue = <Key extends keyof SpreadsheetCell>(
   ),
 ];
 
+const useLockCellCallbacks = (id: string) => {
+  const storeId = useSpreadsheetStoreId(id);
+  const store = useStore(storeId);
+
+  const lockCell = useCallback(
+    (cellId: string, userId: string) => {
+      store?.setPartialRow("cells", cellId, {
+        lockedBy: userId,
+        lockedAt: new Date().toISOString(),
+      } as any);
+    },
+    [store]
+  );
+
+  const unlockCell = useCallback(
+    (cellId: string, userId: string) => {
+      const current = store?.getRow("cells", cellId) as any;
+      if (current?.lockedBy === userId) {
+        store?.setPartialRow("cells", cellId, {
+          lockedBy: "",
+          lockedAt: "",
+        } as any);
+      }
+    },
+    [store]
+  );
+
+  return { lockCell, unlockCell };
+};
+
 const useSpreadsheetCollaborator = (
   id: string,
   userId: string
@@ -251,6 +283,7 @@ export {
   useDelSpreadsheetCellCallback,
   useSpreadsheetCell,
   useSpreadsheetCellValue,
+  useLockCellCallbacks,
   useSpreadsheetValue,
   useSpreadsheetCollaborator,
   useAddSpreadsheetCollaboratorCallback,

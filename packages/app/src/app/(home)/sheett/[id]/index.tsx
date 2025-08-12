@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { View, Text, ScrollView, TextInput, Pressable } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import Animated, {
@@ -14,8 +8,10 @@ import Animated, {
 } from "react-native-reanimated";
 import {
   useSpreadsheetCellValue,
+  useLockCellCallbacks,
   rowIdColumnIdToCellId,
 } from "@/src/utils/store/spreadsheet";
+import { useSession } from "@/src/utils/supabase";
 import { useSheettRouteParams } from "./_layout";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -46,8 +42,16 @@ const Cell = React.memo(function Cell({
     cellId,
     "value"
   );
+  const [lockedBy] = useSpreadsheetCellValue(spreadsheetId, cellId, "lockedBy");
+
+  const { lockCell, unlockCell } = useLockCellCallbacks(spreadsheetId);
+
+  const session = useSession();
+  const currentUserId = session?.user.id ?? "";
 
   const [isEditing, setIsEditing] = useState(false);
+
+  const isLocked = lockedBy && lockedBy !== currentUserId;
 
   return (
     <View
@@ -55,6 +59,8 @@ const Cell = React.memo(function Cell({
         styles.cell,
         styles.cellBorder,
         isEditing ? styles.cellEditingBorder : null,
+        isLocked ? styles.cellLockedBorder : null,
+        isLocked ? styles.cellLockedOpacity : null,
       ]}
     >
       <TextInput
@@ -66,8 +72,19 @@ const Cell = React.memo(function Cell({
         autoCorrect={false}
         keyboardType="default"
         returnKeyType="done"
-        onBlur={() => setIsEditing(false)}
-        onFocus={() => setIsEditing(true)}
+        onFocus={() => {
+          if (isLocked) {
+            return;
+          }
+          setIsEditing(true);
+          lockCell(cellId, currentUserId);
+        }}
+        onBlur={() => {
+          setIsEditing(false);
+          unlockCell(cellId, currentUserId);
+        }}
+        focusable={!isLocked}
+        editable={!isLocked}
       />
     </View>
   );
@@ -281,6 +298,13 @@ const styles = StyleSheet.create((theme) => ({
   cellEditingBorder: {
     borderWidth: 2,
     borderColor: theme.colors.accent,
+  },
+  cellLockedBorder: {
+    borderWidth: 2,
+    borderColor: theme.colors.status.error,
+  },
+  cellLockedOpacity: {
+    opacity: 0.5,
   },
   headerCellBorder: {
     borderWidth: 1,
