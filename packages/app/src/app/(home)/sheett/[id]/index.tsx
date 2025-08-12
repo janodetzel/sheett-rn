@@ -1,5 +1,11 @@
-import React, { useCallback, useMemo } from "react";
-import { View, Text, ScrollView } from "react-native";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { View, Text, ScrollView, TextInput, Pressable } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import Animated, {
   scrollTo,
@@ -7,8 +13,7 @@ import Animated, {
   useAnimatedScrollHandler,
 } from "react-native-reanimated";
 import {
-  SpreadsheetStore,
-  useSpreadsheetCell,
+  useSpreadsheetCellValue,
   rowIdColumnIdToCellId,
 } from "@/src/utils/store/spreadsheet";
 import { useSheettRouteParams } from "./_layout";
@@ -36,11 +41,34 @@ const Cell = React.memo(function Cell({
     [r, c]
   );
 
-  const [cell] = useSpreadsheetCell(spreadsheetId, cellId);
+  const [cellValue, setCellValue] = useSpreadsheetCellValue(
+    spreadsheetId,
+    cellId,
+    "value"
+  );
+
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <View style={[styles.cell, styles.cellBorder]}>
-      <Text style={styles.cellText}>{cell?.value ?? ""}</Text>
+    <View
+      style={[
+        styles.cell,
+        styles.cellBorder,
+        isEditing ? styles.cellEditingBorder : null,
+      ]}
+    >
+      <TextInput
+        style={styles.cellInput}
+        value={cellValue ?? ""}
+        onChangeText={setCellValue}
+        placeholder=""
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="default"
+        returnKeyType="done"
+        onBlur={() => setIsEditing(false)}
+        onFocus={() => setIsEditing(true)}
+      />
     </View>
   );
 });
@@ -113,7 +141,6 @@ export default function Sheett() {
   return (
     <View style={styles.container}>
       <SafeAreaView edges={["bottom"]} style={styles.safeArea}>
-        <SpreadsheetStore id={spreadsheetId} />
         <View style={styles.sheetArea}>
           {/* Left sticky column */}
           <View style={styles.leftPane}>
@@ -137,6 +164,7 @@ export default function Sheett() {
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
               scrollToOverflowEnabled={true}
+              keyboardDismissMode="none"
             />
           </View>
 
@@ -146,6 +174,8 @@ export default function Sheett() {
               horizontal
               showsHorizontalScrollIndicator={false}
               bounces={false}
+              keyboardDismissMode="none"
+              keyboardShouldPersistTaps="handled"
             >
               <View>
                 {/* Column headers */}
@@ -179,6 +209,9 @@ export default function Sheett() {
                   scrollEventThrottle={16}
                   contentContainerStyle={styles.grid}
                   style={{ width: COLS * CELL_SIZE * 2 }}
+                  keyboardDismissMode="none"
+                  keyboardShouldPersistTaps="handled"
+                  automaticallyAdjustKeyboardInsets={true}
                 />
               </View>
             </ScrollView>
@@ -245,6 +278,10 @@ const styles = StyleSheet.create((theme) => ({
     borderWidth: 1,
     borderColor: theme.colors.border.primary,
   },
+  cellEditingBorder: {
+    borderWidth: 2,
+    borderColor: theme.colors.accent,
+  },
   headerCellBorder: {
     borderWidth: 1,
     borderColor: theme.colors.border.primary,
@@ -257,5 +294,27 @@ const styles = StyleSheet.create((theme) => ({
   cellText: {
     color: theme.colors.text.primary,
     fontSize: 13,
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textAlign: "center",
+  },
+  cellPressable: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cellInput: {
+    color: theme.colors.text.primary,
+    fontSize: 13,
+    textAlign: "center",
+    paddingVertical: theme.gap(0.5),
+    paddingHorizontal: theme.gap(0.25),
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    width: "100%",
+    height: "100%",
   },
 }));
