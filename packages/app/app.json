@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Sheett",
-    "slug": "Sheett",
+    "slug": "sheett",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -45,12 +45,10 @@
           "enableFTS": true,
           "useSQLCipher": true,
           "android": {
-            // Override the shared configuration for Android
             "enableFTS": false,
             "useSQLCipher": false
           },
           "ios": {
-            // You can also override the shared configurations for iOS
             "customBuildFlags": [
               "-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_SNAPSHOT=1"
             ]
@@ -60,6 +58,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "6f5cbc8f-91ff-4523-8d65-6d1116868940"
+      }
+    },
+    "owner": "sheett"
   }
 }
