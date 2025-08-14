@@ -115,7 +115,7 @@ export const Colors: {
     neutral: BaseColors.neutral,
     background: BaseColors.base100light,
     inverse: BaseColors.base100dark,
-    surface: BaseColors.white,
+    surface: "#FDF9F3", // Light cream color
     text: {
       primary: BaseColors.neutral,
       secondary: BaseColors.gray600,
@@ -148,7 +148,7 @@ export const Colors: {
     neutral: BaseColors.neutral,
     background: BaseColors.base100dark,
     inverse: BaseColors.base100light,
-    surface: BaseColors.gray800,
+    surface: "#0A0A0A", // Deep black-ish color
     text: {
       primary: BaseColors.gray50,
       secondary: BaseColors.gray400,

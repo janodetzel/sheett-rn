@@ -1,20 +1,20 @@
 import React from "react";
 import {
-  View,
-  ScrollView,
-  ViewStyle,
-  ScrollViewProps,
   Platform,
+  ScrollView,
+  ScrollViewProps,
+  View,
+  ViewStyle,
 } from "react-native";
-import { StyleSheet } from "react-native-unistyles";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { StyleSheet } from "react-native-unistyles";
 
 interface ScreenProps {
   children: React.ReactNode;
   scrollable?: boolean;
   padding?: "none" | "small" | "medium" | "large";
-  backgroundColor?: "background" | "surface";
+  insets?: "none" | "top" | "bottom" | "both";
   centerContent?: boolean;
   style?: ViewStyle;
   scrollViewProps?: ScrollViewProps;
@@ -25,25 +25,28 @@ export default function Screen({
   children,
   scrollable = true,
   padding = "medium",
-  backgroundColor = "background",
+  insets = "both",
   centerContent = false,
   style,
   scrollViewProps,
   contentContainerStyle,
 }: ScreenProps) {
-  const insets = useSafeAreaInsets();
+  const safeAreaInsets = useSafeAreaInsets();
 
   const containerStyle = [
     styles.container,
-    styles[`${backgroundColor}Background`],
-    { paddingTop: insets.top },
+    (insets === "top" || insets === "both") && {
+      paddingTop: safeAreaInsets.top,
+    },
     style,
   ];
 
   const contentStyle = [
     styles.content,
     styles[`${padding}Padding`],
-    { paddingBottom: insets.bottom },
+    (insets === "bottom" || insets === "both") && {
+      paddingBottom: safeAreaInsets.bottom,
+    },
     centerContent && styles.centeredContent,
     contentContainerStyle,
   ];
@@ -75,6 +78,7 @@ export default function Screen({
 const styles = StyleSheet.create((theme) => ({
   container: {
     flex: 1,
+    backgroundColor: theme.colors.background,
   },
   scrollView: {
     flex: 1,
@@ -84,13 +88,6 @@ const styles = StyleSheet.create((theme) => ({
   },
   centeredContent: {
     justifyContent: "center",
-  },
-  // Background variants
-  backgroundBackground: {
-    backgroundColor: theme.colors.background,
-  },
-  surfaceBackground: {
-    backgroundColor: theme.colors.surface,
   },
   // Padding variants
   nonePadding: {
