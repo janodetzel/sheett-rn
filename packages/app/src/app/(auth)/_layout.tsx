@@ -1,12 +1,12 @@
 import { Stack } from "expo-router";
-import CustomHeader from "../../components/CustomHeader";
+import Header from "../../components/layout/CustomHeader";
 
 export default function AuthLayout() {
   return (
     <Stack
       screenOptions={{
         header: ({ route, options }) => (
-          <CustomHeader
+          <Header
             title={options.title || route.name}
             showBack={route.name !== "index"}
             minimal={route.name !== "index"}

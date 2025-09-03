@@ -1,4 +1,4 @@
-import CustomHeader from "@/src/components/CustomHeader";
+import Header from "@/src/components/layout/CustomHeader";
 import { SpreadsheetStore } from "@/src/utils/store/spreadsheet";
 import { Stack, useLocalSearchParams } from "expo-router";
 
@@ -19,7 +19,7 @@ export default function SheettLayout() {
         screenOptions={{
           headerShown: true,
           header: ({ route, options }) => (
-            <CustomHeader title={options.title || route.name} showBack={true} />
+            <Header title={options.title || route.name} showBack={true} />
           ),
         }}
       >

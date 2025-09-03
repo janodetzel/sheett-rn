@@ -68,7 +68,6 @@ export default function App() {
     debugTable: true,
   });
 
-  //All important CSS styles are included as inline styles for this example. This is not recommended for your code.
   return (
     <div className="app">
       {process.env.NODE_ENV === "development" ? (

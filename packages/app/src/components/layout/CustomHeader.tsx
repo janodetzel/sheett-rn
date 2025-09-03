@@ -1,10 +1,9 @@
 import { useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
-import { Colors } from "../constants/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-interface CustomHeaderProps {
+interface HeaderProps {
   title?: string;
   showBack?: boolean;
   rightComponent?: React.ReactNode;
@@ -12,13 +11,13 @@ interface CustomHeaderProps {
   minimal?: boolean;
 }
 
-export default function CustomHeader({
+export default function Header({
   title,
   showBack = false,
   rightComponent,
   onBackPress,
   minimal = false,
-}: CustomHeaderProps) {
+}: HeaderProps) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 

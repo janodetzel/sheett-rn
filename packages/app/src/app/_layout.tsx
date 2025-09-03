@@ -1,8 +1,3 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -11,7 +6,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import "react-native-reanimated";
 
-import { useColorScheme } from "@/src/hooks/useColorScheme";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect, useState } from "react";
 import { SessionProvider, useSession } from "../utils/supabase";
@@ -23,8 +17,6 @@ SplashScreen.preventAutoHideAsync();
 SplashScreen.setOptions({ fade: true });
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   const [sessionReady, setSessionReady] = useState(false);
 
   const [loaded] = useFonts({
@@ -45,16 +37,14 @@ export default function RootLayout() {
   return (
     <SessionProvider callback={() => setSessionReady(true)}>
       <StatusBar style="auto" animated />
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <SafeAreaProvider>
-          <KeyboardProvider>
-            <GestureHandlerRootView>
-              {sessionReady && <RootNavigator />}
-            </GestureHandlerRootView>
-            <SystemBars style={"auto"} />
-          </KeyboardProvider>
-        </SafeAreaProvider>
-      </ThemeProvider>
+      <SafeAreaProvider>
+        <KeyboardProvider>
+          <GestureHandlerRootView>
+            {sessionReady && <RootNavigator />}
+          </GestureHandlerRootView>
+          <SystemBars style={"auto"} />
+        </KeyboardProvider>
+      </SafeAreaProvider>
     </SessionProvider>
   );
 }

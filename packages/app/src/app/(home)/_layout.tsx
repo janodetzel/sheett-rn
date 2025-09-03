@@ -1,7 +1,7 @@
 import { UserStore } from "@/src/utils/store/user";
 import { Stack } from "expo-router";
 import { Provider as TinybaseProvider } from "tinybase/ui-react";
-import CustomHeader from "../../components/CustomHeader";
+import Header from "../../components/layout/CustomHeader";
 
 export default function HomeLayout() {
   return (
