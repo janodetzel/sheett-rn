@@ -48,7 +48,7 @@ type Schemas = [
 type SpreadsheetValues = typeof SPREADSHEET_STORE_VALUES_SCHEMA;
 
 export type SpreadsheetTables = typeof SPREADSHEET_STORE_TABLE_SCHEMA;
-type SpreadsheetCell = SpreadsheetTables["cells"];
+export type SpreadsheetCell = SpreadsheetTables["cells"];
 // type SpreadsheetCollaborator = SpreadsheetTables["collaborators"];
 
 const SPREADSHEET_COLLABORATOR_ROLES = {
