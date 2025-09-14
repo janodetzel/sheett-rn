@@ -1,7 +1,7 @@
-import { SpreadsheetView } from "./SpreadsheetView";
 import { generateColumns, generateRowData } from "@/src/utils/spreadsheet";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { SpreadsheetCell } from "./SpreadsheetCell";
+import { SpreadsheetView } from "./SpreadsheetView";
 
 type SpreadsheetProps = {
   rows: number;

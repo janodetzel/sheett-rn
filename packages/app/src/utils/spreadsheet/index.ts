@@ -1,1 +1,1 @@
-export { generateRowData, generateColumns } from "./utils";
+export { generateRowData, generateColumns, CellCoords } from "./utils";

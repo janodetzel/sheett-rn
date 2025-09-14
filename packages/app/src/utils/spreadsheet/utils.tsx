@@ -2,9 +2,9 @@ import { SpreadsheetCellProps } from "@/src/components/spreadsheet/SpreadsheetCe
 import { createColumnHelper } from "@tanstack/react-table";
 import { ComponentType } from "react";
 
-type CellCoords = { r: number; c: number };
+export type CellCoords = { r: number; c: number };
 
-export const generateRowData = (rows: number) => {
+export const generateRowData = (rows: number): CellCoords[] => {
   return Array.from({ length: rows }, (_, r) => ({
     r,
     c: 0, // Placeholder, actual column data is handled by generating columns
@@ -37,7 +37,7 @@ export const generateColumns = (
     columnHelper.accessor((row) => row, {
       id: `col-${colIndex}`,
       header: getColumnLabel(colIndex),
-      cell: ({ row }) => (
+      cell: ({ row, table }) => (
         <CellComponent
           spreadsheetId={spreadsheetId}
           rowId={row.original.r}
