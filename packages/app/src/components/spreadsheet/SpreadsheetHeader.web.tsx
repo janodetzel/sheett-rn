@@ -1,6 +1,7 @@
-import { CSSProperties } from "react";
 import { flexRender } from "@tanstack/react-table";
 import { SpreadsheetHeaderProps } from "./SpreadsheetHeader";
+import { getWebProps } from "react-native-unistyles/web";
+import { StyleSheet } from "react-native-unistyles";
 
 export function SpreadsheetHeader(props: SpreadsheetHeaderProps) {
   return (
@@ -8,7 +9,7 @@ export function SpreadsheetHeader(props: SpreadsheetHeaderProps) {
       {props.table.getHeaderGroups().map((headerGroup) => (
         <tr key={headerGroup.id}>
           {headerGroup.headers.map((header) => (
-            <th key={header.id} style={headerCellStyles}>
+            <th key={header.id} {...getWebProps(styles.headerCell)}>
               {header.isPlaceholder
                 ? null
                 : flexRender(
@@ -23,12 +24,20 @@ export function SpreadsheetHeader(props: SpreadsheetHeaderProps) {
   );
 }
 
-const headerCellStyles: CSSProperties = {
-  backgroundColor: "#f9fafb",
-  border: "1px solid #d1d5db",
-  padding: "8px",
-  textAlign: "center",
-  fontWeight: "bold",
-  fontSize: "12px",
-  minWidth: "100px",
-};
+const styles = StyleSheet.create((theme) => ({
+  headerCell: {
+    _web: {
+      boxSizing: "border-box",
+      height: 32,
+      minWidth: 100,
+      backgroundColor: theme.colors.background,
+      color: theme.colors.text.primary,
+      border: `1px double ${theme.colors.border.primary}`,
+      textAlign: "center",
+      verticalAlign: "middle",
+      fontWeight: "bold",
+      fontSize: "14px",
+      fontFamily: theme.fontFamily.sans,
+    },
+  },
+}));

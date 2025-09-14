@@ -63,7 +63,7 @@ export function SpreadsheetCell(props: SpreadsheetCellProps) {
   );
 
   return (
-    <div
+    <td
       onClick={handleCellClick}
       {...getWebProps([
         styles.cell,
@@ -82,54 +82,45 @@ export function SpreadsheetCell(props: SpreadsheetCellProps) {
           {...getWebProps(styles.input)}
         />
       ) : (
-        <Text numberOfLines={1} {...getWebProps(styles.cellText)}>
-          {cellValue || ""}
-        </Text>
+        <span {...getWebProps(styles.cellText)}>{cellValue || ""}</span>
       )}
-    </div>
+    </td>
   );
 }
 
 const styles = StyleSheet.create((theme) => ({
   cell: {
     _web: {
-      width: "100%",
       boxSizing: "border-box",
       height: 32,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: theme.colors.background,
-      display: "flex",
-      border: "1px solid",
-      borderColor: theme.colors.border.primary,
-      transition: "all 0.1s ease",
+      border: `1px solid ${theme.colors.border.primary}`,
+      textAlign: "center",
+      verticalAlign: "middle",
       cursor: "pointer",
+      transition: "all 0.2s ease",
+      paddingHorizontal: 8,
     },
   },
   cellEditing: {
     _web: {
-      borderWidth: 2,
-      borderColor: theme.colors.accent,
+      border: `2px solid ${theme.colors.accent}`,
     },
   },
   cellLocked: {
     _web: {
-      borderWidth: 2,
-      borderColor: theme.colors.status.error,
-      // opacity: 0.5,
+      border: `2px solid ${theme.colors.status.error}`,
     },
   },
   input: {
     _web: {
       width: "100%",
       height: "100%",
+      color: theme.colors.text.primary,
       border: "none",
       outline: "none",
-      textAlign: "center",
-      justifyContent: "center",
       backgroundColor: "transparent",
-      color: theme.colors.text.primary,
       fontSize: 14,
+      fontFamily: theme.fontFamily.sans,
     },
   },
   cellText: {
@@ -139,8 +130,7 @@ const styles = StyleSheet.create((theme) => ({
       textOverflow: "ellipsis",
       overflow: "hidden",
       whiteSpace: "nowrap",
-      textAlign: "center",
-      justifyContent: "center",
+      fontFamily: theme.fontFamily.sans,
     },
   },
 }));
