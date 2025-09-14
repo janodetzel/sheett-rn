@@ -2,6 +2,7 @@ import * as UIReact from "tinybase/ui-react/with-schemas";
 import {
   createMergeableStore,
   Row,
+  Table,
   TablesSchema,
   Value,
   ValuesSchema,
@@ -61,6 +62,9 @@ const {
   useCreateMergeableStore,
   useProvideStore,
 
+  useTable,
+  useSetTableCallback,
+
   useValue,
   useSetValueCallback,
 
@@ -91,6 +95,21 @@ const cellIdToRowIdColumnId = (
 
   return [rowId, columnId];
 };
+
+const useSpreadsheetTable = (
+  id: string
+): [
+  Table<SpreadsheetTables, "cells">,
+  (table: Table<SpreadsheetTables, "cells">) => void
+] => [
+  useTable("cells", id),
+  useSetTableCallback(
+    "cells",
+    (table: Table<SpreadsheetTables, "cells">) => table,
+    [],
+    id
+  ),
+];
 
 const useSpreadsheetValue = <Key extends keyof SpreadsheetValues>(
   id: string,
@@ -325,6 +344,7 @@ export {
   useSpreadsheetCellValue,
   useLockCellCallbacks,
   useSpreadsheetValue,
+  useSpreadsheetTable,
   useSpreadsheetCollaborator,
   useAddSpreadsheetCollaboratorCallback,
   useDelSpreadsheetCollaboratorCallback,
