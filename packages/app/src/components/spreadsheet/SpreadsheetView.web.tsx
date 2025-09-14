@@ -1,14 +1,15 @@
-import { SpreadsheetCell } from "@/src/utils/store/spreadsheet";
 import { Table } from "@tanstack/react-table";
 import { CSSProperties } from "react";
-import { SpreadsheetHeader } from "./SpreadsheetHeader";
 import { SpreadsheetBody } from "./SpreadsheetBody";
+import { SpreadsheetHeader } from "./SpreadsheetHeader";
 
-type SpreadsheetProps = {
-  table: Table<SpreadsheetCell>;
+type CellCoords = { r: number; c: number };
+
+type SpreadsheetViewProps = {
+  table: Table<CellCoords>;
 };
 
-export function Spreadsheet(props: SpreadsheetProps) {
+export function SpreadsheetView(props: SpreadsheetViewProps) {
   return (
     <div style={containerStyles}>
       <table style={tableStyles}>
@@ -23,9 +24,10 @@ const containerStyles: CSSProperties = {
   overflow: "auto",
   position: "relative",
   height: "100vh",
+  width: "100%",
 };
 
 const tableStyles: CSSProperties = {
-  display: "grid",
-  flex: 1,
+  borderCollapse: "collapse",
+  width: "100%",
 };

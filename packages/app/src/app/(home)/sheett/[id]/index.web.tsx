@@ -1,29 +1,17 @@
-import { Spreadsheet } from "@/src/components/spreadsheet/Spreadsheet.web";
-import { useReactTable, getCoreRowModel } from "@tanstack/react-table";
+import { Spreadsheet } from "@/src/components/spreadsheet";
 import { useSheettRouteParams } from "./_layout";
 import Screen from "@/src/components/ui/Screen";
-import { useSpreadsheetTable } from "@/src/utils/store/spreadsheet";
-import { Inspector } from "tinybase/ui-react-inspector";
+import { SpreadsheetStore } from "@/src/utils/store/spreadsheet";
 
 export default function Sheett() {
   const { id: spreadsheetId } = useSheettRouteParams();
 
-  const [spreadsheetTable, setSpreadsheetTable] =
-    useSpreadsheetTable(spreadsheetId);
-
-  setSpreadsheetTable({});
-  console.log(spreadsheetTable);
-
-  // const table = useReactTable({
-  //   data: spreadsheetTable ?? [],
-  //   columns: [],
-  //   getCoreRowModel: getCoreRowModel(),
-  // });
-
   return (
-    <Screen padding="none" insets="none" scrollable={false}>
-      <Inspector />
-      {/* <Spreadsheet table={table} />; */}
-    </Screen>
+    <>
+      <SpreadsheetStore id={spreadsheetId} />
+      <Screen padding="none" insets="none" scrollable={false}>
+        <Spreadsheet rows={40} cols={26} spreadsheetId={spreadsheetId} />
+      </Screen>
+    </>
   );
 }

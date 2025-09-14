@@ -2,10 +2,10 @@ import { Table } from "@tanstack/react-table";
 
 type CellCoords = { r: number; c: number };
 
-export type SpreadsheetBodyProps = {
+type SpreadsheetViewProps = {
   table: Table<CellCoords>;
 };
 
-export function SpreadsheetBody(props: SpreadsheetBodyProps) {
+export function SpreadsheetView(props: SpreadsheetViewProps) {
   return null;
 }
