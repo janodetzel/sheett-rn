@@ -219,23 +219,14 @@ const useLockCellCallbacks = (id: string, userId: string, cellId: string) => {
   useFocusEffect(
     useCallback(() => {
       // NOTE: if the cell is locked for more than 10 minutes, unlock it
+      // TODO: Check for permissions
       if (lockedAt && lockedAt < tenMinutesAgo) {
         setPartialRow({
           lockedBy: "",
           lockedAt: "",
         });
       }
-
-      return () => {
-        // NOTE: if the cell is locked by the current user, unlock it
-        if (lockedBy && lockedBy === userId) {
-          setPartialRow({
-            lockedBy: "",
-            lockedAt: "",
-          });
-        }
-      };
-    }, [lockedAt, tenMinutesAgo, setPartialRow, lockedBy, userId])
+    }, [lockedAt, tenMinutesAgo, setPartialRow])
   );
 
   const isLocked = useMemo(
@@ -243,6 +234,8 @@ const useLockCellCallbacks = (id: string, userId: string, cellId: string) => {
       !!lockedBy && lockedBy !== userId && lockedAt && lockedAt > tenMinutesAgo,
     [lockedBy, userId, lockedAt, tenMinutesAgo]
   );
+
+  console.log(lockedBy, lockedAt, tenMinutesAgo, isLocked);
 
   const lockCell = useCallback(() => {
     if (isLocked) {

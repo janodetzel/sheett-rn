@@ -62,6 +62,8 @@ export function SpreadsheetCell(props: SpreadsheetCellProps) {
     [handleSave, handleCancel]
   );
 
+  console.log("isLocked", isLocked);
+
   return (
     <div
       onClick={handleCellClick}
@@ -116,7 +118,7 @@ const styles = StyleSheet.create((theme) => ({
     _web: {
       borderWidth: 2,
       borderColor: theme.colors.status.error,
-      opacity: 0.5,
+      // opacity: 0.5,
     },
   },
   input: {
