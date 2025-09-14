@@ -62,8 +62,6 @@ export function SpreadsheetCell(props: SpreadsheetCellProps) {
     [handleSave, handleCancel]
   );
 
-  console.log("isLocked", isLocked);
-
   return (
     <div
       onClick={handleCellClick}

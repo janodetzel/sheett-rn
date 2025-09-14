@@ -235,8 +235,6 @@ const useLockCellCallbacks = (id: string, userId: string, cellId: string) => {
     [lockedBy, userId, lockedAt, tenMinutesAgo]
   );
 
-  console.log(lockedBy, lockedAt, tenMinutesAgo, isLocked);
-
   const lockCell = useCallback(() => {
     if (isLocked) {
       return;
